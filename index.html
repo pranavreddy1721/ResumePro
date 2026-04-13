@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -140,6 +142,14 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .btn-dl{flex:1;background:linear-gradient(135deg,var(--accent),#4840d4);color:#fff;border:none;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 16px rgba(91,84,240,.3);letter-spacing:.2px}
 .btn-dl:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(91,84,240,.42)}
 .btn-dl:active{transform:translateY(0)}
+.dl-wrap{flex:1;position:relative;display:flex;gap:2px}
+.btn-dl-arrow{background:linear-gradient(135deg,#4840d4,var(--accent));color:#fff;border:none;padding:10px 11px;border-radius:0 8px 8px 0;cursor:pointer;font-size:13px;transition:all .2s;box-shadow:0 4px 16px rgba(91,84,240,.3)}
+.btn-dl-arrow:hover{filter:brightness(1.1)}
+.dl-wrap .btn-dl{border-radius:8px 0 0 8px;flex:1}
+.dl-dropdown{display:none;position:absolute;bottom:calc(100% + 6px);right:0;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;overflow:hidden;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:100}
+.dl-dropdown.open{display:block}
+.dl-dropdown button{display:flex;width:100%;background:none;border:none;color:var(--text);padding:11px 16px;font-family:var(--fb);font-size:13px;cursor:pointer;transition:background .15s;gap:8px;align-items:center}
+.dl-dropdown button:hover{background:rgba(91,84,240,.15)}
 .btn-eye{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:10px 13px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1}
 .btn-eye:hover{color:var(--text);border-color:var(--border2)}
 
@@ -649,10 +659,17 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
     <div class="ed-foot">
       <button class="btn-eye" id="btnEye" title="Toggle preview">👁</button>
-      <button class="btn-dl" id="btnDl">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-        Download PDF
-      </button>
+      <div class="dl-wrap">
+        <button class="btn-dl" id="btnDl">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Download
+        </button>
+        <button class="btn-dl-arrow" id="btnDlArrow" title="More export options">▾</button>
+        <div class="dl-dropdown" id="dlDropdown">
+          <button id="dlPdf">📄 Download PDF</button>
+          <button id="dlImg">🖼️ Export as Image (PNG)</button>
+        </div>
+      </div>
     </div>
   </aside>
 
@@ -743,6 +760,28 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       </div><!-- /rdoc -->
     </div>
   </main>
+</div>
+
+<!-- ===== PAGE OVERFLOW MODAL ===== -->
+<div id="overflowModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:28px 28px 24px;max-width:400px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.5)">
+    <div style="font-size:28px;margin-bottom:10px">📋</div>
+    <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px">Content exceeds one page</div>
+    <div style="font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:20px">
+      Your resume is <span id="overflowPct" style="color:var(--accent2);font-weight:700"></span> longer than A4. You can either fit everything on one page (content will scale down slightly) or download it across multiple pages naturally.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <button id="modalFit" style="background:linear-gradient(135deg,var(--accent),#4840d4);color:#fff;border:none;padding:12px 16px;border-radius:9px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">📄</span>
+        <div><div>Fit to one page</div><div style="font-size:10.5px;font-weight:400;opacity:.8">Scale content to fit A4 — recommended</div></div>
+      </button>
+      <button id="modalMulti" style="background:var(--surface2);color:var(--text);border:1px solid var(--border2);padding:12px 16px;border-radius:9px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">📑</span>
+        <div><div>Download multi-page PDF</div><div style="font-size:10.5px;font-weight:400;opacity:.6">Content flows across 2+ pages</div></div>
+      </button>
+      <button id="modalCancel" style="background:none;color:var(--muted);border:none;padding:8px;font-family:var(--fb);font-size:12px;cursor:pointer;border-radius:7px;margin-top:2px">✕ Cancel</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1296,21 +1335,126 @@ function prog() {
 }
 
 // ===================================================
-// PDF DOWNLOAD
+// EXPORT — PDF (single page / multi) + Image
 // ===================================================
-document.getElementById('btnDl').addEventListener('click', () => {
+function getName() {
+  return document.getElementById('i-name')?.value.trim().replace(/\s+/g,'_') || 'Resume';
+}
+
+function prepareEl() {
   const el = document.getElementById('rdoc');
-  const t = el.style.transform; el.style.transform = 'none';
-  const name = document.getElementById('i-name')?.value.trim().replace(/\s+/g,'_') || 'Resume';
+  const prevTransform = el.style.transform;
+  el.style.transform = 'none';
+  return { el, prevTransform };
+}
+
+function restoreEl(el, prevTransform) {
+  el.style.transform = prevTransform;
+}
+
+// Check if resume overflows one A4 page
+// A4 at 96dpi = 794px wide, 1123px tall
+function getOverflowRatio() {
+  const el = document.getElementById('rdoc');
+  const a4HeightPx = 1123; // 29.7cm at 96dpi
+  const actualH = el.scrollHeight;
+  return actualH / a4HeightPx;
+}
+
+// Download as single-page PDF (scales content to fit)
+function downloadSinglePage() {
+  const { el, prevTransform } = prepareEl();
+  const name = getName();
+  html2canvas(el, { scale: 2, useCORS: true, logging: false, allowTaint: true }).then(canvas => {
+    const imgData = canvas.toDataURL('image/jpeg', 0.99);
+    const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297); // stretch to fill exactly one A4
+    pdf.save(`ResumePro_${name}.pdf`);
+    restoreEl(el, prevTransform);
+  }).catch(() => {
+    restoreEl(el, prevTransform);
+    html2pdf().set({
+      margin: 0,
+      filename: `ResumePro_${name}.pdf`,
+      image: { type: 'jpeg', quality: 0.99 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' }
+    }).from(el).save();
+  });
+}
+
+// Download as multi-page PDF (natural flow)
+function downloadMultiPage() {
+  const { el, prevTransform } = prepareEl();
+  const name = getName();
   html2pdf().set({
     margin: 0,
-    filename: `ResumePro_${name}.pdf`,
+    filename: `ResumePro_${name}_multipage.pdf`,
     image: { type: 'jpeg', quality: 0.99 },
     html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-  }).from(el).save().then(() => { el.style.transform = t; });
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(el).save().then(() => restoreEl(el, prevTransform));
+}
+
+// Modal logic
+const modal = document.getElementById('overflowModal');
+let pendingExport = null;
+
+function showOverflowModal(ratio) {
+  const overPct = Math.round((ratio - 1) * 100);
+  document.getElementById('overflowPct').textContent = `${overPct}% `;
+  modal.style.display = 'flex';
+}
+function hideModal() { modal.style.display = 'none'; }
+
+document.getElementById('modalFit').addEventListener('click', () => { hideModal(); downloadSinglePage(); });
+document.getElementById('modalMulti').addEventListener('click', () => { hideModal(); downloadMultiPage(); });
+document.getElementById('modalCancel').addEventListener('click', hideModal);
+modal.addEventListener('click', e => { if(e.target === modal) hideModal(); });
+
+// Smart PDF trigger — checks overflow first
+function triggerPdf() {
+  const ratio = getOverflowRatio();
+  if(ratio > 1.05) { // more than 5% over = show modal
+    showOverflowModal(ratio);
+  } else {
+    downloadSinglePage();
+  }
+  document.getElementById('dlDropdown').classList.remove('open');
+}
+
+document.getElementById('dlPdf').addEventListener('click', triggerPdf);
+
+// Image export — PNG
+document.getElementById('dlImg').addEventListener('click', () => {
+  const { el, prevTransform } = prepareEl();
+  const name = getName();
+  html2canvas(el, { scale: 2, useCORS: true, logging: false, allowTaint: true }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `ResumePro_${name}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    restoreEl(el, prevTransform);
+  });
+  document.getElementById('dlDropdown').classList.remove('open');
 });
-document.getElementById('sbDl')?.addEventListener('click', () => document.getElementById('btnDl').click());
+
+// Main button = smart PDF
+document.getElementById('btnDl').addEventListener('click', triggerPdf);
+
+// Arrow toggles dropdown
+document.getElementById('btnDlArrow').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('dlDropdown').classList.toggle('open');
+});
+
+// Close dropdown on outside click
+document.addEventListener('click', () => {
+  document.getElementById('dlDropdown').classList.remove('open');
+});
+
+document.getElementById('sbDl')?.addEventListener('click', triggerPdf);
 document.getElementById('btnEye').addEventListener('click', () => {
   const p = document.getElementById('previewPanel');
   p.style.display = p.style.display === 'none' ? '' : 'none';
