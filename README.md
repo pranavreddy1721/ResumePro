@@ -1,19 +1,6 @@
 <div align="center">
 
-<br/>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" fill="none">
-  <defs>
-    <linearGradient id="g1" x1="0" y1="0" x2="72" y2="72" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#6c63ff"/>
-      <stop offset="100%" stop-color="#ff6b9d"/>
-    </linearGradient>
-  </defs>
-  <rect width="72" height="72" rx="18" fill="url(#g1)"/>
-  <text x="36" y="48" font-family="Georgia, serif" font-size="36" font-weight="900" fill="white" text-anchor="middle">R</text>
-</svg>
-
-<br/><br/>
 
 # ResumePro
 
