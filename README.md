@@ -279,22 +279,10 @@ MIT License — free to use, modify, and distribute.
 <div align="center">
 
 **Built with ❤️ for BTech Engineers**
-
 <br/>
-
 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 72 72" fill="none">
-  <defs>
-    <linearGradient id="g2" x1="0" y1="0" x2="72" y2="72" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#6c63ff"/>
-      <stop offset="100%" stop-color="#ff6b9d"/>
-    </linearGradient>
-  </defs>
-  <rect width="72" height="72" rx="18" fill="url(#g2)"/>
-  <text x="36" y="48" font-family="Georgia, serif" font-size="36" font-weight="900" fill="white" text-anchor="middle">R</text>
-</svg>
-
+ </svg>
 <br/>
-
 *ResumePro — Create Your Professional Future*
 
 <br/>
