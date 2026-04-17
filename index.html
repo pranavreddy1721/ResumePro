@@ -1,1 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumePro — BTech Resume Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080c;--surface:#0e1016;--surface2:#14161f;--surface3:#1a1d28;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#eeeef8;--muted:#6e6e92;
+  --accent:#6c63ff;--accent2:#ff6b9d;--accent3:#00d4aa;
+  --resume-bg:#ffffff;--resume-text:#0f172a;--resume-accent:#4338ca;--resume-muted:#64748b;
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;animation:blobDrift 15s ease-in-out infinite alternate}
+.b1{width:520px;height:520px;background:var(--accent);opacity:.13;top:-140px;left:-80px;animation-delay:0s}
+.b2{width:380px;height:380px;background:var(--accent2);opacity:.11;bottom:-60px;right:28%;animation-delay:-5s}
+.b3{width:280px;height:280px;background:var(--accent3);opacity:.10;top:35%;right:-60px;animation-delay:-10s}
+@keyframes blobDrift{from{transform:translate(0,0) scale(1)}to{transform:translate(25px,18px) scale(1.06)}}
 
+.app{display:flex;height:100vh;position:relative;z-index:1}
+.topbar{display:none;height:52px;background:var(--surface);border-bottom:1px solid var(--border);align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:20}
+.topbar-logo{font-family:var(--fh);font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.logo-g{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Sidebar */
+.sidebar{width:62px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:5px;flex-shrink:0;z-index:10}
+.sb-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:14px;color:#fff;margin-bottom:12px;flex-shrink:0}
+.sb-nav{display:flex;flex-direction:column;gap:4px}
+.sb-item{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--muted);position:relative}
+.sb-item:hover,.sb-item.on{background:rgba(108,99,255,.15);color:var(--accent)}
+.sb-item.on::before{content:'';position:absolute;left:-1px;top:50%;transform:translateY(-50%);width:3px;height:16px;background:var(--accent);border-radius:0 3px 3px 0}
+.sb-item svg{width:18px;height:18px}
+.sb-div{width:26px;height:1px;background:var(--border);margin:5px 0}
+
+/* Editor */
+.editor{width:388px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.ed-top{padding:18px 18px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ed-brand{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+.ed-brand .logo-icon{width:32px;height:32px}
+.ed-brand h1{font-family:var(--fh);font-size:18px;font-weight:800;letter-spacing:-.3px}
+.ed-sub{font-size:11px;color:var(--muted);margin-left:41px}
+.prog-wrap{margin-top:11px;background:var(--surface3);border-radius:99px;height:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width .5s ease;width:20%}
+.prog-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px}
+
+/* Tabs */
+.tabs{display:flex;flex-wrap:wrap;padding:7px 10px 0;gap:2px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.tbtn{font-family:var(--fb);font-size:11px;font-weight:500;padding:6px 10px;border-radius:6px 6px 0 0;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+.tbtn:hover{color:var(--text)}
+.tbtn.on{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-bottom:1px solid var(--surface2)}
+
+.ed-scroll{flex:1;overflow-y:auto;padding:16px 16px 6px}
+.ed-scroll::-webkit-scrollbar{width:3px}
+.ed-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+.tpanel{display:none;animation:fadePan .25s ease}
+.tpanel.on{display:block}
+@keyframes fadePan{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.fsec{margin-bottom:20px}
+.ftitle{font-family:var(--fh);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.ftitle::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.fld{margin-bottom:9px}
+.fld label{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.fld input,.fld textarea,.fld select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:7px;font-family:var(--fb);font-size:13px;transition:all .2s;outline:none;resize:none}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--muted);opacity:.65}
+.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--accent);background:rgba(108,99,255,.06);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.fld select option{background:var(--surface2);color:var(--text)}
+.fld textarea{min-height:68px}
+.frow{display:flex;gap:8px}
+.frow .fld{flex:1}
+.hint{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+
+.dcard{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 12px 7px;margin-bottom:9px;animation:cardIn .2s ease}
+@keyframes cardIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.dcard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.dcard-head span{font-size:11px;font-weight:600;color:var(--accent)}
+.dremove{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;transition:color .2s;padding:1px 4px}
+.dremove:hover{color:var(--accent2)}
+
+.addbtn{width:100%;background:transparent;border:1.5px dashed var(--border2);color:var(--muted);padding:8px;border-radius:7px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:3px}
+.addbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(108,99,255,.05)}
+
+.chips-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chip{background:rgba(108,99,255,.13);border:1px solid rgba(108,99,255,.27);color:var(--accent);padding:3px 9px;border-radius:99px;font-size:11px;display:flex;align-items:center;gap:4px;animation:cardIn .2s ease}
+.chip button{background:none;border:none;color:inherit;cursor:pointer;font-size:13px;line-height:1;opacity:.6;transition:opacity .15s}
+.chip button:hover{opacity:1}
+
+.cat-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.cat-chip{background:var(--surface3);border:1px solid var(--border2);color:var(--muted);padding:4px 9px;border-radius:99px;font-size:10.5px;cursor:pointer;transition:all .2s}
+.cat-chip:hover,.cat-chip.sel{background:rgba(108,99,255,.13);border-color:rgba(108,99,255,.3);color:var(--accent)}
+
+.tmpl-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.tmpl-card{border:2px solid var(--border);border-radius:8px;padding:10px 5px 7px;text-align:center;cursor:pointer;transition:all .2s;font-size:10px;color:var(--muted)}
+.tmpl-card:hover{border-color:var(--accent);color:var(--text)}
+.tmpl-card.sel{border-color:var(--accent);color:var(--accent);background:rgba(108,99,255,.08)}
+.tmpl-card .ticon{font-size:18px;display:block;margin-bottom:4px}
+
+.swatches{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.sw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s}
+.sw.on{border-color:#fff;transform:scale(1.15)}
+
+.ed-foot{padding:11px 16px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px}
+.btn-dl{flex:1;background:linear-gradient(135deg,var(--accent),#5046e5);color:#fff;border:none;padding:10px;border-radius:8px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 16px rgba(108,99,255,.3)}
+.btn-dl:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(108,99,255,.4)}
+.btn-eye{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:13px}
+.btn-eye:hover{color:var(--text);border-color:var(--border2)}
+
+/* Preview */
+.preview{flex:1;background:#cbd5e1;background-image:radial-gradient(circle,rgba(0,0,0,.13) 1px,transparent 1px);background-size:18px 18px;display:flex;align-items:flex-start;justify-content:center;padding:22px 18px;overflow-y:auto}
+.preview::-webkit-scrollbar{width:5px}
+.preview::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:99px}
+.pv-wrap{width:100%;max-width:780px}
+.pv-bar{display:flex;justify-content:space-between;align-items:center;padding:7px 13px;background:rgba(7,8,12,.88);backdrop-filter:blur(10px);border-radius:8px;font-size:11px;color:var(--muted);margin-bottom:13px;border:1px solid var(--border)}
+.pv-bar .live{display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Resume Doc */
+.rdoc{width:21cm;min-height:29.7cm;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.26),0 0 0 1px rgba(0,0,0,.07);color:#0f172a;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden}
+
+/* Template Modern */
+.rdoc.t-modern .r-stripe{height:5px;background:linear-gradient(90deg,#4338ca,#7c3aed,#db2777)}
+.rdoc.t-modern .rhead{padding:24px 32px 18px;border-bottom:1px solid #e5e7eb}
+.rdoc.t-modern .rbody{display:flex;gap:24px;padding:0 32px 32px}
+.rdoc.t-modern .rmain{flex:1;padding-top:20px}
+.rdoc.t-modern .rside{width:170px;flex-shrink:0;padding-top:20px;border-left:1px solid #f1f5f9;padding-left:20px}
+
+/* Template Classic */
+.rdoc.t-classic .rhead{background:#1e293b;padding:26px 32px 20px}
+.rdoc.t-classic .rhead .rname,.rdoc.t-classic .rhead .rtitle{color:#f1f5f9}
+.rdoc.t-classic .rhead .rtitle{color:#94a3b8}
+.rdoc.t-classic .rhead .crow span{color:#cbd5e1}
+.rdoc.t-classic .rhead .crow svg{opacity:.5}
+.rdoc.t-classic .rbody{display:flex}
+.rdoc.t-classic .rmain{flex:1;padding:20px 26px}
+.rdoc.t-classic .rside{width:172px;background:#f8fafc;padding:20px 16px;border-left:1px solid #e2e8f0;flex-shrink:0}
+
+/* Template Minimal */
+.rdoc.t-minimal .rhead{padding:32px 38px 20px;border-bottom:2px solid var(--resume-accent)}
+.rdoc.t-minimal .rbody{display:flex;gap:22px;padding:20px 38px 38px}
+.rdoc.t-minimal .rmain{flex:1}
+.rdoc.t-minimal .rside{width:162px;flex-shrink:0}
+
+/* Resume Shared */
+.rname{font-family:'Syne',sans-serif;font-weight:800;font-size:25px;letter-spacing:-.5px;color:#0f172a;line-height:1.1}
+.rtitle{font-size:12.5px;font-weight:400;color:var(--resume-accent);margin-top:3px;letter-spacing:.3px}
+.crow{display:flex;flex-wrap:wrap;gap:4px 11px;margin-top:9px}
+.crow span{font-size:10.5px;color:var(--resume-muted);display:flex;align-items:center;gap:3px}
+.crow svg{opacity:.5;flex-shrink:0}
+.rs{margin-bottom:16px}
+.rs-title{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--resume-accent);margin-bottom:8px;padding-bottom:4px;border-bottom:1.5px solid #e5e7eb}
+.rsummary{font-size:11.5px;line-height:1.65;color:#374151}
+.entry{margin-bottom:12px}
+.entry-head{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.entry-role{font-size:12.5px;font-weight:600;color:#0f172a}
+.entry-date{font-size:10px;color:var(--resume-muted);white-space:nowrap;flex-shrink:0;font-weight:500}
+.entry-org{font-size:11px;color:var(--resume-accent);margin:1px 0 3px;font-style:italic}
+.entry-bullets{list-style:none;padding:0}
+.entry-bullets li{font-size:11px;line-height:1.55;color:#374151;margin-bottom:2px;padding-left:11px;position:relative}
+.entry-bullets li::before{content:'▸';position:absolute;left:0;color:var(--resume-accent);font-size:9.5px;top:1px}
+.rtag{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;padding:2px 8px;border-radius:4px;font-size:10px;margin:2px;font-weight:500}
+.rtags-wrap{display:flex;flex-wrap:wrap;gap:2px}
+.ss{margin-bottom:14px}
+.ss .rs-title{font-size:8.5px;letter-spacing:1.4px}
+.achieve-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:8px}
+.achieve-icon{font-size:12px;margin-top:1px;flex-shrink:0}
+.achieve-text{font-size:11px;color:#374151;line-height:1.4}
+.achieve-text strong{color:#0f172a;font-size:11.5px;display:block}
+.cert-item{margin-bottom:8px}
+.cert-name{font-size:11.5px;font-weight:600;color:#0f172a}
+.cert-meta{font-size:10px;color:var(--resume-muted)}
+.edu-item{margin-bottom:10px}
+.edu-deg{font-size:11.5px;font-weight:600;color:#0f172a;line-height:1.3}
+.edu-school{font-size:10.5px;color:var(--resume-accent);margin-top:1px}
+.edu-meta{font-size:10px;color:var(--resume-muted);margin-top:1px}
+
+@media(max-width:1140px){.rdoc{width:100%;min-height:auto;transform:scale(.82);transform-origin:top center}.preview{padding:16px 10px}}
+@media(max-width:900px){
+  body{overflow:auto}.app{flex-direction:column;height:auto}
+  .sidebar{display:none}.topbar{display:flex}
+  .ed-brand{display:none!important}
+  .ed-sub{display:none!important}
+  .editor{width:100%;height:auto;overflow:visible;border-right:none;border-bottom:1px solid var(--border)}
+  .ed-scroll{overflow:visible;max-height:none}
+  .preview{min-height:400px;padding:12px 6px}
+  .rdoc{width:100%;transform:scale(.72);transform-origin:top center}
+}
+@media print{
+  body *{visibility:hidden}body{background:white;overflow:visible}
+  .rdoc,.rdoc *{visibility:visible}
+  .rdoc{position:fixed;inset:0;width:21cm;min-height:29.7cm;box-shadow:none;transform:none!important}
+}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+<div class="topbar">
+  <div class="topbar-logo"><div class="logo-icon">R</div><span><span class="logo-g">Resume</span>Pro</span></div>
+  <span style="font-size:11px;color:var(--muted);margin-left:auto">Create Your Professional Future</span>
+</div>
+
+<div class="app">
+  <nav class="sidebar">
+    <div class="sb-logo">R</div>
+    <div class="sb-nav">
+      <div class="sb-item on" title="Build Resume">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </div>
+      <div class="sb-item" title="Design">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/></svg>
+      </div>
+      <div class="sb-div"></div>
+      <div class="sb-item" title="Download PDF" id="sbDl">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      </div>
+    </div>
+  </nav>
+
+  <aside class="editor">
+    <div class="ed-top">
+      <div class="ed-brand">
+        <div class="logo-icon">R</div>
+        <h1><span class="logo-g">Resume</span>Pro</h1>
+      </div>
+      <div class="ed-sub">Create Your Professional Future</div>
+      <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-row"><span>Profile Strength</span><span id="progPct">20%</span></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tbtn on" data-tab="basics">📋 Basics</button>
+      <button class="tbtn" data-tab="education">🎓 Education</button>
+      <button class="tbtn" data-tab="experience">💼 Work</button>
+      <button class="tbtn" data-tab="projects">⚙️ Projects</button>
+      <button class="tbtn" data-tab="skills">🛠️ Skills</button>
+      <button class="tbtn" data-tab="extra">🏆 Extra</button>
+      <button class="tbtn" data-tab="design">🎨 Design</button>
+    </div>
+
+    <div class="ed-scroll">
+
+      <!-- BASICS -->
+      <div class="tpanel on" id="tab-basics">
+        <div class="fsec">
+          <div class="ftitle">Personal Info</div>
+          <div class="fld"><label>Full Name</label><input id="i-name" type="text" placeholder="Arjun Sharma" value="Arjun Sharma"></div>
+          <div class="fld"><label>Role / Headline</label><input id="i-title" type="text" placeholder="BTech CSE Student | Full Stack Developer" value="BTech CSE Student | Full Stack Developer"></div>
+          <div class="frow">
+            <div class="fld"><label>Email</label><input id="i-email" type="email" placeholder="arjun@gmail.com" value="arjun.sharma@gmail.com"></div>
+            <div class="fld"><label>Phone</label><input id="i-phone" type="tel" placeholder="+91 98765 43210" value="+91 98765 43210"></div>
+          </div>
+          <div class="frow">
+            <div class="fld"><label>City</label><input id="i-loc" type="text" placeholder="Pune, Maharashtra" value="Pune, Maharashtra"></div>
+            <div class="fld"><label>LinkedIn</label><input id="i-linkedin" type="text" placeholder="linkedin.com/in/arjun" value="linkedin.com/in/arjunsharma"></div>
+          </div>
+          <div class="frow">
+            <div class="fld"><label>GitHub</label><input id="i-github" type="text" placeholder="github.com/arjun" value="github.com/arjunsharma"></div>
+            <div class="fld"><label>Portfolio (optional)</label><input id="i-portfolio" type="text" placeholder="arjun.dev" value=""></div>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Career Objective</div>
+          <div class="fld"><textarea id="i-summary" rows="4" placeholder="2–3 lines: branch, college, key skills, target role...">Passionate BTech Computer Science Engineering student at VIT Pune (2025) with strong foundations in full-stack development and machine learning. Built 10+ projects and completed 2 internships. Seeking SDE / ML Engineer roles at product-based companies.</textarea></div>
+          <div class="hint">💡 Mention your branch, CGPA (if 7.5+), and target company type</div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="tpanel" id="tab-education">
+        <div class="fsec">
+          <div class="ftitle">BTech Degree</div>
+          <div id="edu-con"></div>
+          <button class="addbtn" id="add-edu">+ Add BTech / BE Degree</button>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Class 12 (HSC / Intermediate)</div>
+          <div id="hsc-con"></div>
+          <button class="addbtn" id="add-hsc">+ Add Class 12</button>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Class 10 (SSC / Matriculation)</div>
+          <div id="ssc-con"></div>
+          <button class="addbtn" id="add-ssc">+ Add Class 10</button>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Certifications &amp; Online Courses</div>
+          <div class="hint" style="margin-bottom:8px">NPTEL, Coursera, GATE prep, AWS, Google, Udemy, etc.</div>
+          <div id="cert-con"></div>
+          <button class="addbtn" id="add-cert">+ Add Certification</button>
+        </div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="tpanel" id="tab-experience">
+        <div class="fsec">
+          <div class="ftitle">Internships / Work Experience</div>
+          <div class="hint" style="margin-bottom:8px">Include SDE Intern, ML Intern, Research Intern, Co-op, etc.</div>
+          <div id="exp-con"></div>
+          <button class="addbtn" id="add-exp">+ Add Internship / Job</button>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="tpanel" id="tab-projects">
+        <div class="fsec">
+          <div class="ftitle">Technical Projects</div>
+          <div class="hint" style="margin-bottom:8px">Add 3–5 projects. Mention tech stack, GitHub link, and impact metrics</div>
+          <div id="proj-con"></div>
+          <button class="addbtn" id="add-proj">+ Add Project</button>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="tpanel" id="tab-skills">
+        <div class="fsec">
+          <div class="ftitle">Quick Add — Common BTech Skills</div>
+          <div style="margin-bottom:5px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px">Programming Languages</div>
+          <div class="cat-chips">
+            <div class="cat-chip" data-sk="C++">C++</div><div class="cat-chip" data-sk="C">C</div>
+            <div class="cat-chip" data-sk="Python">Python</div><div class="cat-chip" data-sk="Java">Java</div>
+            <div class="cat-chip" data-sk="JavaScript">JavaScript</div><div class="cat-chip" data-sk="TypeScript">TypeScript</div>
+            <div class="cat-chip" data-sk="Go">Go</div><div class="cat-chip" data-sk="Rust">Rust</div>
+          </div>
+          <div style="margin-bottom:5px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px">Web / Frameworks</div>
+          <div class="cat-chips">
+            <div class="cat-chip" data-sk="React">React</div><div class="cat-chip" data-sk="Next.js">Next.js</div>
+            <div class="cat-chip" data-sk="Node.js">Node.js</div><div class="cat-chip" data-sk="Express.js">Express.js</div>
+            <div class="cat-chip" data-sk="Django">Django</div><div class="cat-chip" data-sk="Flask">Flask</div>
+            <div class="cat-chip" data-sk="FastAPI">FastAPI</div><div class="cat-chip" data-sk="Spring Boot">Spring Boot</div>
+          </div>
+          <div style="margin-bottom:5px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px">Database / Cloud / DevOps</div>
+          <div class="cat-chips">
+            <div class="cat-chip" data-sk="MySQL">MySQL</div><div class="cat-chip" data-sk="PostgreSQL">PostgreSQL</div>
+            <div class="cat-chip" data-sk="MongoDB">MongoDB</div><div class="cat-chip" data-sk="Redis">Redis</div>
+            <div class="cat-chip" data-sk="AWS">AWS</div><div class="cat-chip" data-sk="GCP">GCP</div>
+            <div class="cat-chip" data-sk="Docker">Docker</div><div class="cat-chip" data-sk="Kubernetes">Kubernetes</div>
+          </div>
+          <div style="margin-bottom:5px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px">ML / AI / Data Science</div>
+          <div class="cat-chips">
+            <div class="cat-chip" data-sk="TensorFlow">TensorFlow</div><div class="cat-chip" data-sk="PyTorch">PyTorch</div>
+            <div class="cat-chip" data-sk="Scikit-learn">Scikit-learn</div><div class="cat-chip" data-sk="Pandas">Pandas</div>
+            <div class="cat-chip" data-sk="NumPy">NumPy</div><div class="cat-chip" data-sk="OpenCV">OpenCV</div>
+            <div class="cat-chip" data-sk="Hugging Face">Hugging Face</div><div class="cat-chip" data-sk="LangChain">LangChain</div>
+          </div>
+          <div style="margin-bottom:5px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px">Tools &amp; Concepts</div>
+          <div class="cat-chips">
+            <div class="cat-chip" data-sk="Git">Git</div><div class="cat-chip" data-sk="Linux">Linux</div>
+            <div class="cat-chip" data-sk="REST APIs">REST APIs</div><div class="cat-chip" data-sk="GraphQL">GraphQL</div>
+            <div class="cat-chip" data-sk="Microservices">Microservices</div><div class="cat-chip" data-sk="DSA">DSA</div>
+            <div class="cat-chip" data-sk="System Design">System Design</div><div class="cat-chip" data-sk="Figma">Figma</div>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Your Skills List</div>
+          <div class="fld"><label>Type skill and press Enter</label><input type="text" id="sk-inp" placeholder="e.g. Kafka, Selenium, MATLAB..."></div>
+          <div class="chips-wrap" id="sk-chips"></div>
+        </div>
+      </div>
+
+      <!-- EXTRA -->
+      <div class="tpanel" id="tab-extra">
+        <div class="fsec">
+          <div class="ftitle">Achievements &amp; Awards</div>
+          <div class="hint" style="margin-bottom:8px">SIH, hackathons, coding contests, scholarships, patents, paper publications</div>
+          <div id="ach-con"></div>
+          <button class="addbtn" id="add-ach">+ Add Achievement</button>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Position of Responsibility (POR)</div>
+          <div class="hint" style="margin-bottom:8px">GDSC, E-Cell, IEEE, CSI, NSS, Placement Committee, Fest Organizer</div>
+          <div id="por-con"></div>
+          <button class="addbtn" id="add-por">+ Add POR</button>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Competitive Programming Profiles</div>
+          <div class="frow">
+            <div class="fld"><label>LeetCode</label><input id="i-lc" type="text" placeholder="1850 rating · 400+ solved" value="1850 rating · 400+ solved"></div>
+            <div class="fld"><label>Codeforces</label><input id="i-cf" type="text" placeholder="Specialist · 1450" value="Specialist · 1450"></div>
+          </div>
+          <div class="frow">
+            <div class="fld"><label>CodeChef</label><input id="i-cc" type="text" placeholder="3★ · Max 1750" value="3★ · Max 1750"></div>
+            <div class="fld"><label>HackerRank</label><input id="i-hr" type="text" placeholder="5★ Problem Solving" value="5★ Problem Solving"></div>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Languages Known</div>
+          <div class="frow">
+            <div class="fld"><label>Language</label><input id="i-lang1" type="text" value="Hindi"></div>
+            <div class="fld"><label>Proficiency</label><select id="i-lang1p"><option>Native</option><option>Fluent</option><option>Intermediate</option><option>Basic</option></select></div>
+          </div>
+          <div class="frow">
+            <div class="fld"><label>Language</label><input id="i-lang2" type="text" value="English"></div>
+            <div class="fld"><label>Proficiency</label><select id="i-lang2p"><option>Native</option><option selected>Fluent</option><option>Intermediate</option><option>Basic</option></select></div>
+          </div>
+          <div class="frow">
+            <div class="fld"><label>Language (optional)</label><input id="i-lang3" type="text" placeholder="Marathi"></div>
+            <div class="fld"><label>Proficiency</label><select id="i-lang3p"><option>Native</option><option>Fluent</option><option selected>Intermediate</option><option>Basic</option></select></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESIGN -->
+      <div class="tpanel" id="tab-design">
+        <div class="fsec">
+          <div class="ftitle">Resume Template</div>
+          <div class="tmpl-grid">
+            <div class="tmpl-card sel" data-tmpl="t-modern"><span class="ticon">✦</span>Modern</div>
+            <div class="tmpl-card" data-tmpl="t-classic"><span class="ticon">◈</span>Classic</div>
+            <div class="tmpl-card" data-tmpl="t-minimal"><span class="ticon">◻</span>Minimal</div>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">Accent Color</div>
+          <div class="swatches">
+            <div class="sw on" data-c="#4338ca" style="background:#4338ca"></div>
+            <div class="sw" data-c="#0369a1" style="background:#0369a1"></div>
+            <div class="sw" data-c="#047857" style="background:#047857"></div>
+            <div class="sw" data-c="#b91c1c" style="background:#b91c1c"></div>
+            <div class="sw" data-c="#b45309" style="background:#b45309"></div>
+            <div class="sw" data-c="#7c3aed" style="background:#7c3aed"></div>
+            <div class="sw" data-c="#0e7490" style="background:#0e7490"></div>
+            <div class="sw" data-c="#be185d" style="background:#be185d"></div>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="ftitle">BTech Resume Tips</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.8">
+            ✅ Keep to <strong style="color:var(--text)">1 page</strong> for freshers (2 pages max for 2+ yrs)<br>
+            ✅ Use <strong style="color:var(--text)">action verbs</strong>: Built, Optimized, Led, Deployed, Reduced<br>
+            ✅ Add <strong style="color:var(--text)">metrics</strong>: "Reduced load time by 40%", "500+ users"<br>
+            ✅ Mention CGPA <strong style="color:var(--text)">only if 7.5+</strong> (or equivalent %)<br>
+            ✅ List <strong style="color:var(--text)">4–6 projects</strong> with GitHub links<br>
+            ✅ Add <strong style="color:var(--text)">competitive programming</strong> ratings (LeetCode/CF)<br>
+            ✅ <strong style="color:var(--text)">Tailor your summary</strong> for each company you apply to<br>
+            ✅ Include <strong style="color:var(--text)">SIH, hackathons, GATE rank</strong> if relevant
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ed-foot">
+      <button class="btn-eye" id="btnEye">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      </button>
+      <button class="btn-dl" id="btnDl">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Download PDF
+      </button>
+    </div>
+  </aside>
+
+  <main class="preview" id="previewPanel">
+    <div class="pv-wrap">
+      <div class="pv-bar">
+        <span class="live"><span class="dot"></span> Live Preview</span>
+        <span>A4 · Print Ready · ResumePro 🎓</span>
+      </div>
+
+      <div class="rdoc t-modern" id="rdoc">
+        <div class="r-stripe"></div>
+        <header class="rhead">
+          <div class="rname" id="rv-name">Arjun Sharma</div>
+          <div class="rtitle" id="rv-title">BTech CSE Student | Full Stack Developer</div>
+          <div class="crow">
+            <span id="rv-email"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="22435048574c0c514a43504f4362454f434b4e0c414d4f">[email&#160;protected]</a></span>
+            <span id="rv-phone"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+91 98765 43210</span>
+            <span id="rv-loc"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Pune, Maharashtra</span>
+            <span id="rv-linkedin"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>linkedin.com/in/arjunsharma</span>
+            <span id="rv-github"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>github.com/arjunsharma</span>
+            <span id="rv-portfolio" style="display:none"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg></span>
+          </div>
+        </header>
+
+        <div class="rbody">
+          <div class="rmain">
+            <div class="rs"><div class="rs-title">Career Objective</div><p class="rsummary" id="rv-summary">Passionate BTech Computer Science Engineering student at VIT Pune (2025) with strong foundations in full-stack development and machine learning. Built 10+ projects and completed 2 internships. Seeking SDE / ML Engineer roles at product-based companies.</p></div>
+            <div class="rs" id="rv-exp-sec"><div class="rs-title">Internship / Work Experience</div><div id="rv-exp"></div></div>
+            <div class="rs" id="rv-proj-sec"><div class="rs-title">Projects</div><div id="rv-proj"></div></div>
+            <div class="rs" id="rv-ach-sec"><div class="rs-title">Achievements &amp; Awards</div><div id="rv-ach"></div></div>
+            <div class="rs" id="rv-por-sec"><div class="rs-title">Positions of Responsibility</div><div id="rv-por"></div></div>
+          </div>
+          <div class="rside">
+            <div class="ss"><div class="rs-title">Education</div><div id="rv-edu"></div></div>
+            <div class="ss"><div class="rs-title">Technical Skills</div><div class="rtags-wrap" id="rv-skills"></div></div>
+            <div class="ss" id="rv-cp-sec"><div class="rs-title">Competitive Programming</div><div id="rv-cp"></div></div>
+            <div class="ss" id="rv-cert-sec"><div class="rs-title">Certifications</div><div id="rv-certs"></div></div>
+            <div class="ss" id="rv-lang-sec"><div class="rs-title">Languages</div><div id="rv-langs"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const S={
+  skills:['C++','Python','JavaScript','React','Node.js','MySQL','Git','Docker'],
+  education:[{id:1,type:'btech',degree:'B.Tech Computer Science Engineering',college:'VIT Pune',university:'Savitribai Phule Pune University',year:'2022 – 2026',cgpa:'8.4 / 10'}],
+  hsc:[{id:1,type:'hsc',school:'Delhi Public School',board:'CBSE',year:'2022',score:'93.4%'}],
+  ssc:[{id:1,type:'ssc',school:"St. Xavier's School",board:'CBSE',year:'2020',score:'95.2%'}],
+  certs:[],
+  experience:[{id:1,role:'Software Development Intern',company:'TechMahindra',location:'Pune',dates:'May – Aug 2024',tech:'React, Node.js, MongoDB',desc:'Developed 5 REST APIs consumed by 3 frontend teams, reducing response time by 35%.\nBuilt admin dashboard with real-time Socket.IO chart updates.\nWrote Jest unit tests achieving 80% code coverage.'}],
+  projects:[
+    {id:1,name:'SmartAttend — AI Attendance System',tech:'Python, OpenCV, Flask, MySQL',github:'github.com/arjunsharma/smartattend',desc:'Built face-recognition attendance system with 94% accuracy using OpenCV + dlib.\nDeployed on college server with 500+ daily active student users.\nReduced manual attendance effort by 70% across 10 departments.'},
+    {id:2,name:'CodeCollab — Real-Time Code Editor',tech:'React, Node.js, WebSocket, Monaco Editor',github:'github.com/arjunsharma/codecollab',desc:'Collaborative code editor supporting 10+ languages with live execution sandbox.\nImplemented WebSocket rooms supporting 50 concurrent users.\nFeatured on Product Hunt with 200+ upvotes.'}
+  ],
+  achievements:[
+    {id:1,icon:'🥇',title:'Smart India Hackathon 2023 — National Finalist',desc:'Top 10 among 5000+ teams nationwide.'},
+    {id:2,icon:'🏆',title:'Google Kickstart Round C — Global Rank 850',desc:''}
+  ],
+  por:[{id:1,role:'Technical Head',org:'Google Developer Student Club (GDSC) VIT',dates:'2023 – 2024',desc:'Led 40-member team; organized 6 workshops with 300+ attendees.'}],
+  counters:{edu:2,hsc:2,ssc:2,cert:1,exp:2,proj:3,ach:3,por:2}
+};
+
+// Tabs
+document.querySelectorAll('.tbtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.tpanel').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('on');
+  });
+});
+
+// Basic sync
+[['i-name','rv-name'],['i-title','rv-title'],['i-summary','rv-summary']].forEach(([a,b])=>{
+  const i=document.getElementById(a),o=document.getElementById(b);
+  if(i&&o)i.addEventListener('input',()=>{o.textContent=i.value;prog();});
+});
+['email','phone','loc','linkedin','github'].forEach(k=>{
+  const i=document.getElementById('i-'+k),o=document.getElementById('rv-'+k);
+  if(!i||!o)return;
+  i.addEventListener('input',()=>{const ic=o.querySelector('svg')?.outerHTML||'';o.innerHTML=ic+' '+i.value;prog();});
+});
+const portIn=document.getElementById('i-portfolio'),portOut=document.getElementById('rv-portfolio');
+if(portIn)portIn.addEventListener('input',()=>{const ic=portOut.querySelector('svg')?.outerHTML||'';portOut.style.display=portIn.value.trim()?'':'none';portOut.innerHTML=ic+portIn.value;prog();});
+
+// Skills
+function renderSkChips(){
+  const w=document.getElementById('sk-chips');w.innerHTML='';
+  S.skills.forEach((sk,i)=>{
+    const c=document.createElement('div');c.className='chip';
+    c.innerHTML=`${sk} <button data-i="${i}">×</button>`;
+    c.querySelector('button').onclick=()=>{S.skills.splice(i,1);renderSkChips();renderSkPrev();prog();};
+    w.appendChild(c);
+  });
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.toggle('sel',S.skills.includes(c.dataset.sk)));
+}
+function renderSkPrev(){
+  const w=document.getElementById('rv-skills');w.innerHTML='';
+  S.skills.forEach(sk=>{const t=document.createElement('span');t.className='rtag';t.textContent=sk;w.appendChild(t);});
+}
+document.getElementById('sk-inp').addEventListener('keydown',e=>{
+  if(e.key==='Enter'||e.key===','){e.preventDefault();const v=e.target.value.trim().replace(/,$/,'');if(v&&!S.skills.includes(v)){S.skills.push(v);renderSkChips();renderSkPrev();prog();}e.target.value='';}
+});
+document.querySelectorAll('.cat-chip').forEach(c=>{
+  c.addEventListener('click',()=>{const sk=c.dataset.sk;if(S.skills.includes(sk))S.skills=S.skills.filter(s=>s!==sk);else S.skills.push(sk);renderSkChips();renderSkPrev();prog();});
+});
+
+// Edu cards
+function mkEduCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  const degOpts=['B.Tech Computer Science Engineering','B.Tech Information Technology','B.Tech Electronics & Communication Engineering','B.Tech Electrical Engineering','B.Tech Mechanical Engineering','B.Tech Civil Engineering','B.Tech AI & Data Science','B.Tech AI & Machine Learning','B.Tech Cyber Security','B.Tech Chemical Engineering','B.E. Computer Engineering','B.E. Electronics & Telecommunication'].map(v=>`<option value="${v}"${item.degree===v?' selected':''}>${v}</option>`).join('');
+  d.innerHTML=`<div class="dcard-head"><span>BTech #${item.id}</span><button class="dremove" data-type="edu" data-id="${item.id}">×</button></div>
+  <div class="fld"><label>Degree / Branch</label><select data-field="degree">${degOpts}</select></div>
+  <div class="fld"><label>College Name</label><input type="text" data-field="college" placeholder="VIT / IIT / NIT / BITS / SRM..." value="${item.college||''}"></div>
+  <div class="fld"><label>Affiliating University</label><input type="text" data-field="university" placeholder="SPPU / Anna University / VTU..." value="${item.university||''}"></div>
+  <div class="frow">
+    <div class="fld"><label>Year (From – To)</label><input type="text" data-field="year" placeholder="2022 – 2026" value="${item.year||''}"></div>
+    <div class="fld"><label>CGPA / Percentage</label><input type="text" data-field="cgpa" placeholder="8.5 / 10 or 85%" value="${item.cgpa||''}"></div>
+  </div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>{inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();prog();});inp.addEventListener('change',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();prog();});});
+  return d;
+}
+function mkHscCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  const boards=['CBSE','ICSE','Maharashtra HSC (MH Board)','Telangana Board (TSBIE)','Andhra Board (BIEAP)','Karnataka PUC','Tamil Nadu HSC','UP Board (UPMSP)','Bihar Board (BSEB)','Rajasthan Board (RBSE)','Gujarat Board (GSEB)','West Bengal Board (WBCHSE)','Other'].map(v=>`<option value="${v}"${item.board===v?' selected':''}>${v}</option>`).join('');
+  d.innerHTML=`<div class="dcard-head"><span>Class 12 #${item.id}</span><button class="dremove" data-type="hsc" data-id="${item.id}">×</button></div>
+  <div class="fld"><label>School Name</label><input type="text" data-field="school" value="${item.school||''}"></div>
+  <div class="frow">
+    <div class="fld"><label>Board</label><select data-field="board">${boards}</select></div>
+    <div class="fld"><label>Passing Year</label><input type="text" data-field="year" placeholder="2022" value="${item.year||''}"></div>
+  </div>
+  <div class="frow">
+    <div class="fld"><label>Stream</label><select data-field="stream"><option value="Science (PCM)"${item.stream==='Science (PCM)'?' selected':''}>Science (PCM)</option><option value="Science (PCB)"${item.stream==='Science (PCB)'?' selected':''}>Science (PCB)</option><option value="Science (PCMB)"${item.stream==='Science (PCMB)'?' selected':''}>Science (PCMB)</option><option value="Commerce">Commerce</option><option value="Arts">Arts</option></select></div>
+    <div class="fld"><label>Percentage / Grade</label><input type="text" data-field="score" placeholder="93.4%" value="${item.score||''}"></div>
+  </div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>{inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();});inp.addEventListener('change',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();});});
+  return d;
+}
+function mkSscCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  const boards=['CBSE','ICSE','Maharashtra SSC (MH Board)','Telangana Board (BSE TS)','Andhra Board (BSE AP)','Karnataka SSLC','Tamil Nadu SSLC','UP Board','Bihar Board','Other'].map(v=>`<option value="${v}"${item.board===v?' selected':''}>${v}</option>`).join('');
+  d.innerHTML=`<div class="dcard-head"><span>Class 10 #${item.id}</span><button class="dremove" data-type="ssc" data-id="${item.id}">×</button></div>
+  <div class="fld"><label>School Name</label><input type="text" data-field="school" value="${item.school||''}"></div>
+  <div class="frow">
+    <div class="fld"><label>Board</label><select data-field="board">${boards}</select></div>
+    <div class="fld"><label>Passing Year</label><input type="text" data-field="year" placeholder="2020" value="${item.year||''}"></div>
+  </div>
+  <div class="fld"><label>Percentage / CGPA</label><input type="text" data-field="score" placeholder="95.2%" value="${item.score||''}"></div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>{inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();});inp.addEventListener('change',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();});});
+  return d;
+}
+function mkCertCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  d.innerHTML=`<div class="dcard-head"><span>Cert #${item.id}</span><button class="dremove" data-type="cert" data-id="${item.id}">×</button></div>
+  <div class="fld"><label>Certification Name</label><input type="text" data-field="name" placeholder="AWS Certified / NPTEL Python / Google Data Analytics" value="${item.name||''}"></div>
+  <div class="frow">
+    <div class="fld"><label>Platform / Issuer</label><input type="text" data-field="issuer" placeholder="NPTEL / Coursera / AWS / Udemy" value="${item.issuer||''}"></div>
+    <div class="fld"><label>Year</label><input type="text" data-field="year" placeholder="2024" value="${item.year||''}"></div>
+  </div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderCertPrev();}));
+  return d;
+}
+function renderEduPrev(){
+  const w=document.getElementById('rv-edu');w.innerHTML='';
+  [...S.education,...S.hsc,...S.ssc].forEach(item=>{
+    const d=document.createElement('div');d.className='edu-item';
+    if(item.type==='btech'){d.innerHTML=`<div class="edu-deg">${item.degree||'B.Tech Degree'}</div><div class="edu-school">${item.college||'College'}${item.university?'<br><span style="font-size:9.5px;color:var(--resume-muted)">'+item.university+'</span>':''}</div><div class="edu-meta">${item.year||''} · CGPA: ${item.cgpa||'–'}</div>`;}
+    else if(item.type==='hsc'){d.innerHTML=`<div class="edu-deg">Class XII${item.stream?' — '+item.stream:''}</div><div class="edu-school">${item.school||'School'}<br><span style="font-size:9.5px;color:var(--resume-muted)">${item.board||'Board'}</span></div><div class="edu-meta">${item.year||''} · ${item.score||''}</div>`;}
+    else{d.innerHTML=`<div class="edu-deg">Class X</div><div class="edu-school">${item.school||'School'}<br><span style="font-size:9.5px;color:var(--resume-muted)">${item.board||'Board'}</span></div><div class="edu-meta">${item.year||''} · ${item.score||''}</div>`;}
+    w.appendChild(d);
+  });
+}
+function renderCertPrev(){
+  const w=document.getElementById('rv-certs');w.innerHTML='';
+  document.getElementById('rv-cert-sec').style.display=S.certs.length?'':'none';
+  S.certs.forEach(c=>{const d=document.createElement('div');d.className='cert-item';d.innerHTML=`<div class="cert-name">${c.name||'Certification'}</div><div class="cert-meta">${c.issuer||''}${c.year?' · '+c.year:''}</div>`;w.appendChild(d);});
+}
+function renderEduCards(){const c=document.getElementById('edu-con');c.innerHTML='';S.education.forEach(i=>c.appendChild(mkEduCard(i)));}
+function renderHscCards(){const c=document.getElementById('hsc-con');c.innerHTML='';S.hsc.forEach(i=>c.appendChild(mkHscCard(i)));}
+function renderSscCards(){const c=document.getElementById('ssc-con');c.innerHTML='';S.ssc.forEach(i=>c.appendChild(mkSscCard(i)));}
+function renderCertCards(){const c=document.getElementById('cert-con');c.innerHTML='';S.certs.forEach(i=>c.appendChild(mkCertCard(i)));}
+document.getElementById('add-edu').onclick=()=>{const i={id:S.counters.edu++,type:'btech',degree:'B.Tech Computer Science Engineering',college:'',university:'',year:'',cgpa:''};S.education.push(i);document.getElementById('edu-con').appendChild(mkEduCard(i));prog();};
+document.getElementById('add-hsc').onclick=()=>{const i={id:S.counters.hsc++,type:'hsc',school:'',board:'CBSE',year:'',stream:'Science (PCM)',score:''};S.hsc.push(i);document.getElementById('hsc-con').appendChild(mkHscCard(i));};
+document.getElementById('add-ssc').onclick=()=>{const i={id:S.counters.ssc++,type:'ssc',school:'',board:'CBSE',year:'',score:''};S.ssc.push(i);document.getElementById('ssc-con').appendChild(mkSscCard(i));};
+document.getElementById('add-cert').onclick=()=>{const i={id:S.counters.cert++,name:'',issuer:'',year:''};S.certs.push(i);document.getElementById('cert-con').appendChild(mkCertCard(i));};
+
+// Experience
+function mkExpCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  d.innerHTML=`<div class="dcard-head"><span>Internship #${item.id}</span><button class="dremove" data-type="exp" data-id="${item.id}">×</button></div>
+  <div class="frow"><div class="fld"><label>Role</label><input type="text" data-field="role" placeholder="SDE Intern / ML Intern / Research Intern" value="${item.role||''}"></div><div class="fld"><label>Company</label><input type="text" data-field="company" placeholder="TCS / Google / Startup" value="${item.company||''}"></div></div>
+  <div class="frow"><div class="fld"><label>Location</label><input type="text" data-field="location" placeholder="Pune / Remote / Bengaluru" value="${item.location||''}"></div><div class="fld"><label>Duration</label><input type="text" data-field="dates" placeholder="May – Aug 2024" value="${item.dates||''}"></div></div>
+  <div class="fld"><label>Tech Stack</label><input type="text" data-field="tech" placeholder="React, Node.js, AWS, MySQL" value="${item.tech||''}"></div>
+  <div class="fld"><label>Contributions (one per line)</label><textarea data-field="desc" rows="4" placeholder="Built X used by Y users.\nOptimized Z reducing time by N%.">${item.desc||''}</textarea></div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderExpPrev();prog();}));
+  return d;
+}
+function renderExpPrev(){
+  const w=document.getElementById('rv-exp');w.innerHTML='';
+  document.getElementById('rv-exp-sec').style.display=S.experience.length?'':'none';
+  S.experience.forEach(item=>{
+    const dv=document.createElement('div');dv.className='entry';
+    const b=(item.desc||'').split('\n').filter(l=>l.trim());
+    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${item.role||'Role'}</span><span class="entry-date">${item.dates||''}</span></div>
+    <div class="entry-org">${item.company||'Company'}${item.location?', '+item.location:''}${item.tech?' · '+item.tech:''}</div>
+    <ul class="entry-bullets">${b.map(x=>`<li>${x}</li>`).join('')||'<li>Describe your contributions and impact.</li>'}</ul>`;
+    w.appendChild(dv);
+  });
+}
+function renderExpCards(){const c=document.getElementById('exp-con');c.innerHTML='';S.experience.forEach(i=>c.appendChild(mkExpCard(i)));}
+document.getElementById('add-exp').onclick=()=>{const i={id:S.counters.exp++,role:'',company:'',location:'',dates:'',tech:'',desc:''};S.experience.push(i);document.getElementById('exp-con').appendChild(mkExpCard(i));prog();};
+
+// Projects
+function mkProjCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  d.innerHTML=`<div class="dcard-head"><span>Project #${item.id}</span><button class="dremove" data-type="proj" data-id="${item.id}">×</button></div>
+  <div class="fld"><label>Project Name</label><input type="text" data-field="name" placeholder="SmartAttend — AI Attendance System" value="${item.name||''}"></div>
+  <div class="fld"><label>Tech Stack</label><input type="text" data-field="tech" placeholder="Python, Flask, OpenCV, MySQL" value="${item.tech||''}"></div>
+  <div class="fld"><label>GitHub / Deployed Link</label><input type="text" data-field="github" placeholder="github.com/you/project" value="${item.github||''}"></div>
+  <div class="fld"><label>Key Points (one per line)</label><textarea data-field="desc" rows="3" placeholder="Built X achieving Y.\nDeployed on Z with N active users.">${item.desc||''}</textarea></div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderProjPrev();}));
+  return d;
+}
+function renderProjPrev(){
+  const w=document.getElementById('rv-proj');w.innerHTML='';
+  document.getElementById('rv-proj-sec').style.display=S.projects.length?'':'none';
+  S.projects.forEach(item=>{
+    const dv=document.createElement('div');dv.className='entry';
+    const b=(item.desc||'').split('\n').filter(l=>l.trim());
+    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${item.name||'Project'}</span>${item.github?`<span class="entry-date" style="color:var(--resume-accent);font-size:9.5px">${item.github}</span>`:''}</div>
+    ${item.tech?`<div class="entry-org">${item.tech}</div>`:''}
+    <ul class="entry-bullets">${b.map(x=>`<li>${x}</li>`).join('')||'<li>Describe the project and impact.</li>'}</ul>`;
+    w.appendChild(dv);
+  });
+}
+function renderProjCards(){const c=document.getElementById('proj-con');c.innerHTML='';S.projects.forEach(i=>c.appendChild(mkProjCard(i)));}
+document.getElementById('add-proj').onclick=()=>{const i={id:S.counters.proj++,name:'',tech:'',github:'',desc:''};S.projects.push(i);document.getElementById('proj-con').appendChild(mkProjCard(i));};
+
+// Achievements
+function mkAchCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  d.innerHTML=`<div class="dcard-head"><span>Achievement #${item.id}</span><button class="dremove" data-type="ach" data-id="${item.id}">×</button></div>
+  <div class="frow"><div class="fld" style="max-width:58px"><label>Icon</label><input type="text" data-field="icon" value="${item.icon||'🏆'}"></div><div class="fld"><label>Title</label><input type="text" data-field="title" placeholder="SIH 2023 National Finalist" value="${item.title||''}"></div></div>
+  <div class="fld"><label>Short Description (optional)</label><input type="text" data-field="desc" placeholder="Top 10 among 5000+ teams" value="${item.desc||''}"></div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderAchPrev();}));
+  return d;
+}
+function renderAchPrev(){
+  const w=document.getElementById('rv-ach');w.innerHTML='';
+  document.getElementById('rv-ach-sec').style.display=S.achievements.length?'':'none';
+  S.achievements.forEach(item=>{
+    const dv=document.createElement('div');dv.className='achieve-item';
+    dv.innerHTML=`<span class="achieve-icon">${item.icon||'🏆'}</span><div class="achieve-text"><strong>${item.title||'Achievement'}</strong>${item.desc?item.desc:''}</div>`;
+    w.appendChild(dv);
+  });
+}
+function renderAchCards(){const c=document.getElementById('ach-con');c.innerHTML='';S.achievements.forEach(i=>c.appendChild(mkAchCard(i)));}
+document.getElementById('add-ach').onclick=()=>{const i={id:S.counters.ach++,icon:'🏆',title:'',desc:''};S.achievements.push(i);document.getElementById('ach-con').appendChild(mkAchCard(i));};
+
+// POR
+function mkPorCard(item){
+  const d=document.createElement('div');d.className='dcard';d.dataset.id=item.id;
+  d.innerHTML=`<div class="dcard-head"><span>POR #${item.id}</span><button class="dremove" data-type="por" data-id="${item.id}">×</button></div>
+  <div class="frow"><div class="fld"><label>Position / Role</label><input type="text" data-field="role" placeholder="Technical Head / Chairperson" value="${item.role||''}"></div><div class="fld"><label>Dates</label><input type="text" data-field="dates" placeholder="2023 – 2024" value="${item.dates||''}"></div></div>
+  <div class="fld"><label>Club / Organisation</label><input type="text" data-field="org" placeholder="GDSC / E-Cell / IEEE / NSS / Placement Comm." value="${item.org||''}"></div>
+  <div class="fld"><label>Description</label><input type="text" data-field="desc" placeholder="Led X members; organized Y events with Z attendees." value="${item.desc||''}"></div>`;
+  d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderPorPrev();}));
+  return d;
+}
+function renderPorPrev(){
+  const w=document.getElementById('rv-por');w.innerHTML='';
+  document.getElementById('rv-por-sec').style.display=S.por.length?'':'none';
+  S.por.forEach(item=>{
+    const dv=document.createElement('div');dv.className='entry';
+    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${item.role||'Position'}</span><span class="entry-date">${item.dates||''}</span></div><div class="entry-org">${item.org||''}</div>${item.desc?`<ul class="entry-bullets"><li>${item.desc}</li></ul>`:''}`;
+    w.appendChild(dv);
+  });
+}
+function renderPorCards(){const c=document.getElementById('por-con');c.innerHTML='';S.por.forEach(i=>c.appendChild(mkPorCard(i)));}
+document.getElementById('add-por').onclick=()=>{const i={id:S.counters.por++,role:'',org:'',dates:'',desc:''};S.por.push(i);document.getElementById('por-con').appendChild(mkPorCard(i));};
+
+// Remove
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.dremove');if(!btn)return;
+  const{type,id}=btn.dataset;const numId=parseInt(id);
+  const maps={
+    edu:[S.education,renderEduCards,renderEduPrev],
+    hsc:[S.hsc,renderHscCards,renderEduPrev],
+    ssc:[S.ssc,renderSscCards,renderEduPrev],
+    cert:[S.certs,renderCertCards,renderCertPrev],
+    exp:[S.experience,renderExpCards,renderExpPrev],
+    proj:[S.projects,renderProjCards,renderProjPrev],
+    ach:[S.achievements,renderAchCards,renderAchPrev],
+    por:[S.por,renderPorCards,renderPorPrev]
+  };
+  if(maps[type]){const[arr,rCards,rPrev]=maps[type];const idx=arr.findIndex(i=>i.id===numId);if(idx>-1){arr.splice(idx,1);rCards();rPrev();prog();}}
+});
+
+// CP
+function renderCPPrev(){
+  const items=[['i-lc','LeetCode'],['i-cf','Codeforces'],['i-cc','CodeChef'],['i-hr','HackerRank']];
+  const w=document.getElementById('rv-cp');w.innerHTML='';let any=false;
+  items.forEach(([id,label])=>{const v=document.getElementById(id)?.value?.trim();if(v){any=true;const d=document.createElement('div');d.style.cssText='margin-bottom:5px;font-size:11px;color:#374151';d.innerHTML=`<strong style="color:#0f172a">${label}:</strong> ${v}`;w.appendChild(d);}});
+  document.getElementById('rv-cp-sec').style.display=any?'':'none';
+}
+['i-lc','i-cf','i-cc','i-hr'].forEach(id=>document.getElementById(id)?.addEventListener('input',renderCPPrev));
+
+// Languages
+function renderLangPrev(){
+  const w=document.getElementById('rv-langs');w.innerHTML='';let any=false;
+  [['i-lang1','i-lang1p'],['i-lang2','i-lang2p'],['i-lang3','i-lang3p']].forEach(([ln,lp])=>{
+    const l=document.getElementById(ln),p=document.getElementById(lp);
+    if(l?.value?.trim()){any=true;const d=document.createElement('div');d.style.cssText='margin-bottom:4px;font-size:11px;color:#374151';d.innerHTML=`<strong style="color:#0f172a">${l.value}</strong> <span style="color:var(--resume-muted)">— ${p?.value||'Fluent'}</span>`;w.appendChild(d);}
+  });
+  document.getElementById('rv-lang-sec').style.display=any?'':'none';
+}
+['i-lang1','i-lang2','i-lang3','i-lang1p','i-lang2p','i-lang3p'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',renderLangPrev);el.addEventListener('change',renderLangPrev);}});
+
+// Template
+document.querySelectorAll('.tmpl-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('.tmpl-card').forEach(c=>c.classList.remove('sel'));
+    card.classList.add('sel');
+    const doc=document.getElementById('rdoc');
+    doc.className=`rdoc ${card.dataset.tmpl}`;
+    let stripe=doc.querySelector('.r-stripe');
+    if(card.dataset.tmpl==='t-modern'){if(!stripe){stripe=document.createElement('div');stripe.className='r-stripe';doc.prepend(stripe);}}
+    else{if(stripe)stripe.remove();}
+  });
+});
+
+// Color
+document.querySelectorAll('.sw').forEach(sw=>{
+  sw.addEventListener('click',()=>{
+    document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));
+    sw.classList.add('on');
+    document.documentElement.style.setProperty('--resume-accent',sw.dataset.c);
+  });
+});
+
+// Progress
+function prog(){
+  const checks=[
+    document.getElementById('i-name')?.value.trim(),
+    document.getElementById('i-email')?.value.trim(),
+    document.getElementById('i-phone')?.value.trim(),
+    document.getElementById('i-summary')?.value.trim(),
+    S.education.length>0,
+    S.hsc.length>0,
+    S.experience.length>0,
+    S.projects.length>0,
+    S.skills.length>=4,
+    S.achievements.length>0
+  ];
+  const pct=Math.round(checks.filter(Boolean).length/checks.length*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+}
+
+// PDF
+document.getElementById('btnDl').addEventListener('click',()=>{
+  const el=document.getElementById('rdoc');const t=el.style.transform;el.style.transform='none';
+  html2pdf().set({margin:0,filename:'ResumePro_Resume.pdf',image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,logging:false},jsPDF:{unit:'cm',format:'a4',orientation:'portrait'}}).from(el).save().then(()=>{el.style.transform=t;});
+});
+document.getElementById('sbDl')?.addEventListener('click',()=>document.getElementById('btnDl').click());
+document.getElementById('btnEye').addEventListener('click',()=>{const p=document.getElementById('previewPanel');p.style.display=p.style.display==='none'?'':'none';});
+
+// Init
+renderEduCards();renderHscCards();renderSscCards();renderCertCards();
+renderEduPrev();renderCertPrev();
+rend
