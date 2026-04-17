@@ -1,8 +1,6 @@
 <div align="center">
 
-
-
-# ResumePro
+  # ResumePro
 
 ### *Create Your Professional Future*
 
