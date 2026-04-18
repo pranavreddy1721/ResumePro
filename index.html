@@ -7,8 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -63,8 +61,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .prog-row .ats-badge{background:rgba(0,204,170,.12);border:1px solid rgba(0,204,170,.25);color:var(--accent3);padding:1px 7px;border-radius:99px;font-size:9.5px;font-weight:600}
 
 /* Tabs */
-.tabs{display:flex;padding:7px 10px 0;gap:2px;flex-shrink:0;overflow-x:auto;border-bottom:1px solid var(--border)}
-.tabs::-webkit-scrollbar{height:0}
+.tabs{display:flex;flex-wrap:wrap;padding:7px 10px 0;gap:2px;flex-shrink:0;border-bottom:1px solid var(--border)}
 .tbtn{font-family:var(--fb);font-size:10.5px;font-weight:500;padding:6px 9px;border-radius:6px 6px 0 0;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
 .tbtn:hover{color:var(--text)}
 .tbtn.on{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-bottom:1px solid var(--surface2)}
@@ -139,17 +136,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 /* Footer */
 .ed-foot{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px;align-items:center}
-.btn-dl{flex:1;background:linear-gradient(135deg,var(--accent),#4840d4);color:#fff;border:none;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 16px rgba(91,84,240,.3);letter-spacing:.2px}
+.btn-dl{flex:1;min-width:0;background:linear-gradient(135deg,var(--accent),#4840d4);color:#fff;border:none;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 16px rgba(91,84,240,.3);letter-spacing:.2px}
 .btn-dl:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(91,84,240,.42)}
 .btn-dl:active{transform:translateY(0)}
-.dl-wrap{flex:1;position:relative;display:flex;gap:2px}
-.btn-dl-arrow{background:linear-gradient(135deg,#4840d4,var(--accent));color:#fff;border:none;padding:10px 11px;border-radius:0 8px 8px 0;cursor:pointer;font-size:13px;transition:all .2s;box-shadow:0 4px 16px rgba(91,84,240,.3)}
-.btn-dl-arrow:hover{filter:brightness(1.1)}
-.dl-wrap .btn-dl{border-radius:8px 0 0 8px;flex:1}
-.dl-dropdown{display:none;position:absolute;bottom:calc(100% + 6px);right:0;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;overflow:hidden;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:100}
-.dl-dropdown.open{display:block}
-.dl-dropdown button{display:flex;width:100%;background:none;border:none;color:var(--text);padding:11px 16px;font-family:var(--fb);font-size:13px;cursor:pointer;transition:background .15s;gap:8px;align-items:center}
-.dl-dropdown button:hover{background:rgba(91,84,240,.15)}
 .btn-eye{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:10px 13px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1}
 .btn-eye:hover{color:var(--text);border-color:var(--border2)}
 
@@ -167,14 +156,14 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 /* ============================================================
    RESUME DOCUMENT — THREE TEMPLATES
    ============================================================ */
-.rdoc{width:21cm;min-height:29.7cm;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.07);color:#111827;font-family:'DM Sans',sans-serif;position:relative;display:flex;flex-direction:column}
+.rdoc{width:21cm;min-height:29.7cm;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.07);color:#111827;font-family:'DM Sans',sans-serif;position:relative}
 
 /* ——— TEMPLATE 1: MODERN ——— */
 .rdoc.t-modern .r-accent-bar{height:4px;background:linear-gradient(90deg,#1d4ed8,#7c3aed,#db2777)}
 .rdoc.t-modern .rhead{padding:26px 34px 20px;border-bottom:1px solid #e5e7eb;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
 .rdoc.t-modern .rhead-left{flex:1}
 .rdoc.t-modern .rhead-right{text-align:right;flex-shrink:0}
-.rdoc.t-modern .rbody{gap:0}
+.rdoc.t-modern .rbody{display:flex;gap:0}
 .rdoc.t-modern .rmain{flex:1;padding:22px 26px 34px}
 .rdoc.t-modern .rside{width:175px;flex-shrink:0;background:#f8fafc;padding:22px 18px 34px;border-left:1px solid #e5e7eb}
 
@@ -188,7 +177,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 /* ——— TEMPLATE 2: MINIMAL ——— */
 .rdoc.t-minimal .rhead{padding:36px 42px 24px}
-.rdoc.t-minimal .rbody{gap:32px;padding:0 42px 42px}
+.rdoc.t-minimal .rbody{display:flex;gap:32px;padding:0 42px 42px}
 .rdoc.t-minimal .rmain{flex:1;padding-top:24px}
 .rdoc.t-minimal .rside{width:160px;flex-shrink:0;padding-top:24px}
 
@@ -203,10 +192,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 /* ——— TEMPLATE 3: CORPORATE ——— */
 .rdoc.t-corporate .rhead{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);padding:30px 36px 26px;color:white;display:flex;align-items:flex-start;gap:24px}
-.rdoc.t-corporate .rhead-avatar{width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:white;flex-shrink:0;margin-top:4px;overflow:hidden}
-.rdoc.t-corporate .rhead-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.rdoc.t-corporate .rhead-avatar{width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:white;flex-shrink:0;margin-top:4px}
 .rdoc.t-corporate .rhead-info{flex:1}
-.rdoc.t-corporate .rbody{gap:0}
+.rdoc.t-corporate .rbody{display:flex;gap:0}
 .rdoc.t-corporate .rmain{flex:1;padding:22px 28px 34px}
 .rdoc.t-corporate .rside{width:178px;flex-shrink:0;background:#f0f4f8;padding:22px 18px 34px;border-left:1px solid #e2e8f0}
 
@@ -218,8 +206,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .rdoc.t-corporate .rs-title .sico{font-size:12px}
 .rdoc.t-corporate .rside .rs-title{color:#0f172a}
 
-/* Shared body layout */
-.rbody{flex:1;display:flex}
+/* ——— SHARED RESUME STYLES ——— */
 .rs{margin-bottom:18px}
 .rsummary{font-size:12px;line-height:1.68;color:#374151}
 
@@ -278,19 +265,25 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .ats-hidden{position:absolute;opacity:0;font-size:1px;pointer-events:none;color:white;z-index:-1}
 
 /* Responsive */
-@media(max-width:1150px){.rdoc{transform:scale(.78);transform-origin:top center;margin-bottom:-22%}.preview{padding:16px 10px}}
+@media(max-width:1150px){.rdoc{width:100%;min-height:auto;transform:scale(.82);transform-origin:top center}.preview{padding:16px 10px}}
 @media(max-width:900px){
   body{overflow:auto}.app{flex-direction:column;height:auto}
   .sidebar{display:none}.topbar{display:flex}
+  .ed-brand{display:none!important}
+  .ed-tagline{display:none!important}
   .editor{width:100%;height:auto;overflow:visible;border-right:none;border-bottom:1px solid var(--border)}
   .ed-scroll{overflow:visible;max-height:none}
+  .ed-foot{position:sticky;bottom:0;background:var(--surface);z-index:10;padding:10px 14px}
+  .btn-dl{font-size:12px;padding:10px 12px}
   .preview{min-height:400px;padding:12px 6px}
-  .rdoc{transform:scale(.55);transform-origin:top center;margin-bottom:-50%}
+  .rdoc{width:100%;transform:scale(.7);transform-origin:top center}
+  .frow{flex-direction:column;gap:4px}
+  .frow .fld{flex:none}
 }
 @media print{
   body *{visibility:hidden}body{background:white;overflow:visible}
   .rdoc,.rdoc *{visibility:visible}
-  .rdoc{position:fixed;inset:0;width:21cm;height:29.7cm;overflow:hidden;box-shadow:none;transform:none!important}
+  .rdoc{position:fixed;inset:0;width:21cm;min-height:29.7cm;box-shadow:none;transform:none!important}
 }
 </style>
 </head>
@@ -350,7 +343,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       <div class="tpanel on" id="tab-basics">
         <div class="fsec">
           <div class="ftitle"><span class="ficon">👤</span> Personal Details</div>
-          <div class="fld"><label>Full Name</label><input id="i-name" type="text" placeholder="Pranav Reddy" value="Pranav Reddy"></div>
+          <div class="fld"><label>Full Name</label><input id="i-name" type="text" placeholder="Omkar Patil" value="Pranav Reddy"></div>
           <div class="fld"><label>Professional Headline</label><input id="i-title" type="text" placeholder="BTech CSE Student | Full Stack Developer" value="B.Tech Computer Science Student | Full Stack &amp; Web Developer"></div>
           <div class="frow">
             <div class="fld"><label>Email</label><input id="i-email" type="email" value="pranav.reddy@gmail.com"></div>
@@ -358,25 +351,11 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
           </div>
           <div class="frow">
             <div class="fld"><label>City</label><input id="i-loc" type="text" value="Ashta, Sangli, Maharashtra"></div>
-            <div class="fld"><label>LinkedIn</label><input id="i-linkedin" type="text" placeholder="https://www.linkedin.com/in/pranavreddy1721" value="https://www.linkedin.com/in/pranavreddy1721/"></div>
+            <div class="fld"><label>LinkedIn</label><input id="i-linkedin" type="text" value="linkedin.com/in/pranavreddy"></div>
           </div>
           <div class="frow">
-            <div class="fld"><label>GitHub</label><input id="i-github" type="text" placeholder="https://github.com/pranavreddy1721" value="https://github.com/pranavreddy1721"></div>
-            <div class="fld"><label>Portfolio (optional)</label><input id="i-portfolio" type="text" placeholder="pranav.dev"></div>
-          </div>
-          <div class="fsec" style="margin-top:4px">
-            <div class="ftitle"><span class="ficon">📷</span> Profile Photo (optional)</div>
-            <div style="display:flex;align-items:center;gap:12px">
-              <div id="photo-preview" style="width:64px;height:64px;border-radius:50%;background:var(--surface3);border:2px dashed var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;cursor:pointer;" onclick="document.getElementById('i-photo').click()">📷</div>
-              <div style="flex:1">
-                <input type="file" id="i-photo" accept="image/*" style="display:none">
-                <button type="button" onclick="document.getElementById('i-photo').click()" style="width:100%;background:var(--surface2);border:1.5px dashed var(--border2);color:var(--muted);padding:8px 12px;border-radius:7px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:all .2s;text-align:left">
-                  📂 Click to upload photo
-                </button>
-                <div class="hint" style="margin-top:4px">JPG/PNG — used in Corporate template header</div>
-                <button type="button" id="remove-photo" style="display:none;background:none;border:none;color:var(--accent2);font-size:11px;cursor:pointer;margin-top:3px;padding:0;text-decoration:underline">✕ Remove photo</button>
-              </div>
-            </div>
+            <div class="fld"><label>GitHub</label><input id="i-github" type="text" value="github.com/pranavreddy"></div>
+            <div class="fld"><label>Portfolio (optional)</label><input id="i-portfolio" type="text" placeholder="omkar.dev"></div>
           </div>
         </div>
         <div class="fsec">
@@ -659,17 +638,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
     <div class="ed-foot">
       <button class="btn-eye" id="btnEye" title="Toggle preview">👁</button>
-      <div class="dl-wrap">
-        <button class="btn-dl" id="btnDl">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          Download
-        </button>
-        <button class="btn-dl-arrow" id="btnDlArrow" title="More export options">▾</button>
-        <div class="dl-dropdown" id="dlDropdown">
-          <button id="dlPdf">📄 Download PDF</button>
-          <button id="dlImg">🖼️ Export as Image (PNG)</button>
-        </div>
-      </div>
+      <button class="btn-dl" id="btnDl">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Download PDF
+      </button>
     </div>
   </aside>
 
@@ -698,7 +670,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
           </div>
           <div class="rhead-right" id="rhead-contact">
             <div class="crow" id="rv-crow">
-              <span id="rv-email"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> pranav.reddy@gmail.com</span>
+              <span id="rv-email"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>pranav.reddy@gmail.com</span>
               <span id="rv-phone"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+91 97650 12345</span>
               <span id="rv-loc"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Ashta, Sangli, Maharashtra</span>
               <span id="rv-linkedin"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>linkedin.com/in/pranavreddy</span>
@@ -706,7 +678,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
               <span id="rv-portfolio" style="display:none"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg></span>
             </div>
           </div>
-          <!-- Corporate avatar / Photo (hidden by default) -->
+          <!-- Corporate avatar (hidden by default) -->
           <div class="rhead-avatar" id="r-avatar" style="display:none">PR</div>
         </header>
 
@@ -760,28 +732,6 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       </div><!-- /rdoc -->
     </div>
   </main>
-</div>
-
-<!-- ===== PAGE OVERFLOW MODAL ===== -->
-<div id="overflowModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)">
-  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:28px 28px 24px;max-width:400px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.5)">
-    <div style="font-size:28px;margin-bottom:10px">📋</div>
-    <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px">Content exceeds one page</div>
-    <div style="font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:20px">
-      Your resume is <span id="overflowPct" style="color:var(--accent2);font-weight:700"></span> longer than A4. You can either fit everything on one page (content will scale down slightly) or download it across multiple pages naturally.
-    </div>
-    <div style="display:flex;flex-direction:column;gap:9px">
-      <button id="modalFit" style="background:linear-gradient(135deg,var(--accent),#4840d4);color:#fff;border:none;padding:12px 16px;border-radius:9px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px">📄</span>
-        <div><div>Fit to one page</div><div style="font-size:10.5px;font-weight:400;opacity:.8">Scale content to fit A4 — recommended</div></div>
-      </button>
-      <button id="modalMulti" style="background:var(--surface2);color:var(--text);border:1px solid var(--border2);padding:12px 16px;border-radius:9px;font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px">📑</span>
-        <div><div>Download multi-page PDF</div><div style="font-size:10.5px;font-weight:400;opacity:.6">Content flows across 2+ pages</div></div>
-      </button>
-      <button id="modalCancel" style="background:none;color:var(--muted);border:none;padding:8px;font-family:var(--fb);font-size:12px;cursor:pointer;border-radius:7px;margin-top:2px">✕ Cancel</button>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -838,45 +788,19 @@ document.querySelectorAll('.tbtn').forEach(b => {
 // ===================================================
 [['i-name','rv-name'],['i-title','rv-title'],['i-summary','rv-summary']].forEach(([a,b]) => {
   const i = document.getElementById(a), o = document.getElementById(b);
-  if(i && o) {
-    const sync = () => { o.textContent = i.value; prog(); };
-    i.addEventListener('input', sync);
-    sync(); // initialize on load
-  }
+  if(i && o) i.addEventListener('input', () => { o.textContent = i.value; prog(); });
 });
-
-// ===================================================
-// PHOTO DATA + AVATAR (declared early — used by syncField below)
-// ===================================================
-let photoDataUrl = null;
-
-function updateCorporateAvatar() {
-  const av = document.getElementById('r-avatar');
-  if(photoDataUrl) {
-    av.innerHTML = `<img src="${photoDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-  } else {
-    const name = document.getElementById('i-name')?.value.trim() || '';
-    const parts = name.split(' ');
-    const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
-    av.textContent = initials.toUpperCase() || 'PR';
-  }
-}
 
 ['email','phone','loc','linkedin','github'].forEach(k => {
   const i = document.getElementById('i-'+k), o = document.getElementById('rv-'+k);
   if(!i||!o) return;
-  const syncField = () => {
+  i.addEventListener('input', () => {
     const ic = o.querySelector('svg')?.outerHTML || '';
-    const val = i.value.trim();
-    let display = val;
-    if(k === 'linkedin' && val) { try { display = val.replace(/https?:\/\/(www\.)?linkedin\.com\/in\//,'linkedin.com/in/'); } catch(e){} }
-    if(k === 'github' && val) { try { display = val.replace(/https?:\/\/(www\.)?github\.com\//,'github.com/'); } catch(e){} }
-    o.innerHTML = ic + ' ' + display;
+    o.innerHTML = ic + ' ' + i.value;
+    // corporate avatar initials
     updateCorporateAvatar();
     prog();
-  };
-  i.addEventListener('input', syncField);
-  syncField();
+  });
 });
 const portIn = document.getElementById('i-portfolio'), portOut = document.getElementById('rv-portfolio');
 if(portIn) portIn.addEventListener('input', () => {
@@ -885,28 +809,12 @@ if(portIn) portIn.addEventListener('input', () => {
   portOut.innerHTML = ic + portIn.value;
 });
 
-// ===================================================
-// PHOTO UPLOAD HANDLERS
-// ===================================================
-document.getElementById('i-photo').addEventListener('change', function() {
-  const file = this.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    photoDataUrl = e.target.result;
-    const prev = document.getElementById('photo-preview');
-    prev.innerHTML = `<img src="${photoDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-    updateCorporateAvatar();
-    document.getElementById('remove-photo').style.display = '';
-  };
-  reader.readAsDataURL(file);
-});
-document.getElementById('remove-photo').addEventListener('click', () => {
-  photoDataUrl = null;
-  document.getElementById('photo-preview').innerHTML = '📷';
-  document.getElementById('remove-photo').style.display = 'none';
-  document.getElementById('i-photo').value = '';
-  updateCorporateAvatar();
-});
+function updateCorporateAvatar() {
+  const name = document.getElementById('i-name')?.value.trim() || '';
+  const parts = name.split(' ');
+  const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+  document.getElementById('r-avatar').textContent = initials.toUpperCase() || 'RP';
+}
 
 // ===================================================
 // SKILLS — Categorized
@@ -989,38 +897,13 @@ document.getElementById('sk-inp').addEventListener('keydown', e => {
 // ===================================================
 function mkEduCard(item) {
   const d = document.createElement('div'); d.className = 'dcard'; d.dataset.id = item.id;
-  const knownDegrees = ['B.Tech Computer Science Engineering','B.Tech Information Technology','B.Tech Electronics & Communication Engineering','B.Tech Electrical Engineering','B.Tech Mechanical Engineering','B.Tech Civil Engineering','B.Tech AI & Data Science','B.Tech AI & Machine Learning','B.Tech Cyber Security','B.Tech Chemical Engineering','B.E. Computer Engineering','B.E. Electronics & Telecommunication'];
-  const isCustom = item.degree && !knownDegrees.includes(item.degree);
-  const degOpts = knownDegrees.map(v => `<option value="${v}"${(!isCustom && item.degree===v)?' selected':''}>${v}</option>`).join('');
+  const degOpts = ['B.Tech Computer Science Engineering','B.Tech Information Technology','B.Tech Electronics & Communication Engineering','B.Tech Electrical Engineering','B.Tech Mechanical Engineering','B.Tech Civil Engineering','B.Tech AI & Data Science','B.Tech AI & Machine Learning','B.Tech Cyber Security','B.Tech Chemical Engineering','B.E. Computer Engineering','B.E. Electronics & Telecommunication'].map(v => `<option value="${v}"${item.degree===v?' selected':''}>${v}</option>`).join('');
   d.innerHTML = `<div class="dcard-head"><span>🎓 BTech #${item.id}</span><button class="dremove" data-type="edu" data-id="${item.id}">×</button></div>
-  <div class="fld"><label>Degree / Branch</label>
-    <select data-field="degree" style="display:${isCustom?'none':''};">${degOpts}<option value="__custom__"${isCustom?' selected':''}>✏️ Type manually...</option></select>
-    <input type="text" data-field="degree" placeholder="e.g. B.Sc. Computer Science, M.Tech Data Science..." value="${isCustom?item.degree:''}" style="display:${isCustom?'':'none'};margin-top:5px;">
-    <button type="button" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;margin-top:3px;padding:0;text-decoration:underline;" class="deg-toggle">${isCustom?'← Choose from list':'✏️ Type manually instead'}</button>
-  </div>
+  <div class="fld"><label>Degree</label><select data-field="degree">${degOpts}</select></div>
   <div class="fld"><label>College Name</label><input type="text" data-field="college" placeholder="COEP / PICT / VJTI / SIT / MIT / VIT Pune..." value="${item.college||''}"></div>
   <div class="fld"><label>Affiliating University</label><input type="text" data-field="university" placeholder="SPPU / Mumbai University / DBATU..." value="${item.university||''}"></div>
   <div class="frow"><div class="fld"><label>Years</label><input type="text" data-field="year" placeholder="2022 – 2026" value="${item.year||''}"></div><div class="fld"><label>CGPA / %</label><input type="text" data-field="cgpa" placeholder="8.7 / 10" value="${item.cgpa||''}"></div></div>`;
-  const sel = d.querySelector('select[data-field="degree"]');
-  const inp = d.querySelector('input[data-field="degree"]');
-  const togBtn = d.querySelector('.deg-toggle');
-  sel.addEventListener('change', () => {
-    if(sel.value === '__custom__') {
-      sel.style.display = 'none'; inp.style.display = ''; togBtn.textContent = '← Choose from list';
-      inp.value = ''; item.degree = ''; renderEduPrev(); prog();
-    } else { item.degree = sel.value; renderEduPrev(); prog(); }
-  });
-  inp.addEventListener('input', () => { item.degree = inp.value; renderEduPrev(); prog(); });
-  togBtn.addEventListener('click', () => {
-    if(sel.style.display === 'none') {
-      sel.style.display = ''; inp.style.display = 'none'; togBtn.textContent = '✏️ Type manually instead';
-      sel.value = knownDegrees[0]; item.degree = sel.value; renderEduPrev(); prog();
-    } else {
-      sel.style.display = 'none'; inp.style.display = ''; togBtn.textContent = '← Choose from list';
-      inp.value = item.degree && !knownDegrees.includes(item.degree) ? item.degree : ''; item.degree = inp.value; renderEduPrev(); prog();
-    }
-  });
-  d.querySelectorAll('[data-field]:not(select[data-field="degree"]):not(input[data-field="degree"])').forEach(el => { el.addEventListener('input',()=>{item[el.dataset.field]=el.value;renderEduPrev();prog();}); el.addEventListener('change',()=>{item[el.dataset.field]=el.value;renderEduPrev();prog();}); });
+  d.querySelectorAll('[data-field]').forEach(inp => { inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();prog();}); inp.addEventListener('change',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();prog();}); });
   return d;
 }
 function mkHscCard(item) {
@@ -1111,7 +994,7 @@ function mkProjCard(item) {
   d.innerHTML=`<div class="dcard-head"><span>⚙️ Project #${item.id}</span><button class="dremove" data-type="proj" data-id="${item.id}">×</button></div>
   <div class="fld"><label>Project Name</label><input type="text" data-field="name" placeholder="ShikshaSetu — Smart Attendance Portal" value="${item.name||''}"></div>
   <div class="fld"><label>Tech Stack</label><input type="text" data-field="tech" placeholder="React.js, Node.js, MongoDB, Docker" value="${item.tech||''}"></div>
-  <div class="fld"><label>GitHub / Live Link</label><input type="text" data-field="github" placeholder="github.com/pranavreddy1721/project" value="${item.github||''}"></div>
+  <div class="fld"><label>GitHub / Live Link</label><input type="text" data-field="github" placeholder="github.com/omkarpatil/project" value="${item.github||''}"></div>
   <div class="fld"><label>Key Points (one per line)</label><textarea data-field="desc" rows="3" placeholder="Engineered X achieving Y metric.\nDeployed on Z with N active users.">${item.desc||''}</textarea></div>`;
   d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderProjPrev();}));
   return d;
@@ -1335,133 +1218,28 @@ function prog() {
 }
 
 // ===================================================
-// EXPORT — PDF (single page / multi) + Image
+// PDF DOWNLOAD
 // ===================================================
-function getName() {
-  return document.getElementById('i-name')?.value.trim().replace(/\s+/g,'_') || 'Resume';
-}
-
-function prepareEl() {
+document.getElementById('btnDl').addEventListener('click', () => {
   const el = document.getElementById('rdoc');
-  const prevTransform = el.style.transform;
-  el.style.transform = 'none';
-  return { el, prevTransform };
-}
-
-function restoreEl(el, prevTransform) {
-  el.style.transform = prevTransform;
-}
-
-// Check if resume overflows one A4 page
-// A4 at 96dpi = 794px wide, 1123px tall
-function getOverflowRatio() {
-  const el = document.getElementById('rdoc');
-  const a4HeightPx = 1123; // 29.7cm at 96dpi
-  const actualH = el.scrollHeight;
-  return actualH / a4HeightPx;
-}
-
-// Download as single-page PDF (scales content to fit)
-function downloadSinglePage() {
-  const { el, prevTransform } = prepareEl();
-  const name = getName();
-  html2canvas(el, { scale: 2, useCORS: true, logging: false, allowTaint: true }).then(canvas => {
-    const imgData = canvas.toDataURL('image/jpeg', 0.99);
-    const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
-    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297); // stretch to fill exactly one A4
-    pdf.save(`ResumePro_${name}.pdf`);
-    restoreEl(el, prevTransform);
-  }).catch(() => {
-    restoreEl(el, prevTransform);
-    html2pdf().set({
-      margin: 0,
-      filename: `ResumePro_${name}.pdf`,
-      image: { type: 'jpeg', quality: 0.99 },
-      html2canvas: { scale: 2, useCORS: true, logging: false },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: 'avoid-all' }
-    }).from(el).save();
-  });
-}
-
-// Download as multi-page PDF (natural flow)
-function downloadMultiPage() {
-  const { el, prevTransform } = prepareEl();
-  const name = getName();
+  const t = el.style.transform; el.style.transform = 'none';
+  const name = document.getElementById('i-name')?.value.trim().replace(/\s+/g,'_') || 'Resume';
   html2pdf().set({
     margin: 0,
-    filename: `ResumePro_${name}_multipage.pdf`,
+    filename: `ResumePro_${name}.pdf`,
     image: { type: 'jpeg', quality: 0.99 },
     html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).from(el).save().then(() => restoreEl(el, prevTransform));
-}
-
-// Modal logic
-const modal = document.getElementById('overflowModal');
-let pendingExport = null;
-
-function showOverflowModal(ratio) {
-  const overPct = Math.round((ratio - 1) * 100);
-  document.getElementById('overflowPct').textContent = `${overPct}% `;
-  modal.style.display = 'flex';
-}
-function hideModal() { modal.style.display = 'none'; }
-
-document.getElementById('modalFit').addEventListener('click', () => { hideModal(); downloadSinglePage(); });
-document.getElementById('modalMulti').addEventListener('click', () => { hideModal(); downloadMultiPage(); });
-document.getElementById('modalCancel').addEventListener('click', hideModal);
-modal.addEventListener('click', e => { if(e.target === modal) hideModal(); });
-
-// Smart PDF trigger — checks overflow first
-function triggerPdf() {
-  const ratio = getOverflowRatio();
-  if(ratio > 1.05) { // more than 5% over = show modal
-    showOverflowModal(ratio);
-  } else {
-    downloadSinglePage();
-  }
-  document.getElementById('dlDropdown').classList.remove('open');
-}
-
-document.getElementById('dlPdf').addEventListener('click', triggerPdf);
-
-// Image export — PNG
-document.getElementById('dlImg').addEventListener('click', () => {
-  const { el, prevTransform } = prepareEl();
-  const name = getName();
-  html2canvas(el, { scale: 2, useCORS: true, logging: false, allowTaint: true }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = `ResumePro_${name}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    restoreEl(el, prevTransform);
-  });
-  document.getElementById('dlDropdown').classList.remove('open');
+    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+  }).from(el).save().then(() => { el.style.transform = t; });
 });
-
-// Main button = smart PDF
-document.getElementById('btnDl').addEventListener('click', triggerPdf);
-
-// Arrow toggles dropdown
-document.getElementById('btnDlArrow').addEventListener('click', (e) => {
-  e.stopPropagation();
-  document.getElementById('dlDropdown').classList.toggle('open');
-});
-
-// Close dropdown on outside click
-document.addEventListener('click', () => {
-  document.getElementById('dlDropdown').classList.remove('open');
-});
-
-document.getElementById('sbDl')?.addEventListener('click', triggerPdf);
+document.getElementById('sbDl')?.addEventListener('click', () => document.getElementById('btnDl').click());
 document.getElementById('btnEye').addEventListener('click', () => {
   const p = document.getElementById('previewPanel');
   p.style.display = p.style.display === 'none' ? '' : 'none';
 });
 
 // ===================================================
-// INIT — render everything on load
+// INIT
 // ===================================================
 renderEduCards(); renderHscCards(); renderSscCards(); renderCertCards();
 renderEduPrev(); renderCertPrev();
@@ -1469,10 +1247,11 @@ renderExpCards(); renderExpPrev();
 renderProjCards(); renderProjPrev();
 renderAchCards(); renderAchPrev();
 renderPorCards(); renderPorPrev();
-renderSkillsPreview(); renderSkChips(); syncCatChips();
+renderSkChips(); renderSkillsPreview(); syncCatChips();
 renderCPPrev(); renderLangPrev();
-prog();
+updateCorporateAvatar();
 applyTemplate(S.template);
+prog();
 </script>
 </body>
 </html>
