@@ -154,7 +154,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ============================================================
-   RESUME DOCUMENT — THREE TEMPLATES
+   RESUME DOCUMENT — TEMPLATES
    ============================================================ */
 .rdoc{width:21cm;min-height:29.7cm;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.07);color:#111827;font-family:'DM Sans',sans-serif;position:relative}
 
@@ -205,6 +205,57 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .rdoc.t-corporate .rs-title{font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:#0f172a;margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid;display:flex;align-items:center;gap:6px}
 .rdoc.t-corporate .rs-title .sico{font-size:12px}
 .rdoc.t-corporate .rside .rs-title{color:#0f172a}
+
+/* ——— TEMPLATE 4: CLASSIC (single column, ATS plain-text style) ——— */
+.rdoc.t-classic .r-accent-bar{display:none}
+.rdoc.t-classic .rhead{padding:30px 40px 14px;text-align:center;border-bottom:2px solid #111827;display:block}
+.rdoc.t-classic .rhead-avatar{display:none!important}
+.rdoc.t-classic .rname{font-family:'DM Sans',sans-serif;font-weight:700;font-size:20px;letter-spacing:1px;color:#111827;text-align:center}
+.rdoc.t-classic .rtitle{display:none}
+.rdoc.t-classic .rhead-right{text-align:center;width:100%;margin-top:4px}
+.rdoc.t-classic .crow{display:flex;flex-direction:row!important;flex-wrap:wrap;justify-content:center!important;align-items:center!important;gap:0;margin-top:4px!important}
+.rdoc.t-classic .crow span{font-size:10.5px;color:#111827;display:inline-flex;align-items:center;gap:3px}
+.rdoc.t-classic .crow span:not(:last-child)::after{content:'|';margin:0 7px;color:#9ca3af}
+.rdoc.t-classic .crow svg{display:none}
+.rdoc.t-classic .rbody{display:block;padding:14px 40px 30px}
+.rdoc.t-classic .rmain{width:100%;padding:0}
+.rdoc.t-classic .rside{display:none}
+.rdoc.t-classic .rs{margin-bottom:12px}
+.rdoc.t-classic .rs-title{font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#111827;margin-bottom:6px;padding-bottom:2px;border-bottom:1.3px solid #111827}
+.rdoc.t-classic .rs-title .sico{display:none}
+.rdoc.t-classic .rsummary{font-size:11px;line-height:1.55;color:#1f2937;text-align:justify}
+.rdoc.t-classic .entry{margin-bottom:9px}
+.rdoc.t-classic .entry-role{font-size:11.5px;font-weight:700;color:#111827}
+.rdoc.t-classic .entry-org{font-size:11px;color:#111827;font-style:italic;margin:1px 0 3px}
+.rdoc.t-classic .entry-date{background:none;padding:0;font-size:10.5px;font-weight:500;color:#111827}
+.rdoc.t-classic .entry-bullets li{font-size:10.7px;line-height:1.5;padding-left:13px;color:#1f2937}
+.rdoc.t-classic .entry-bullets li::before{content:'●';font-size:6px;top:5px;color:#111827}
+.rdoc.t-classic .edu-item{margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0 8px}
+.rdoc.t-classic .edu-deg{font-size:11px;font-weight:700;color:#111827}
+.rdoc.t-classic .edu-school{font-size:10.7px;color:#111827;font-style:italic;display:inline}
+.rdoc.t-classic .edu-uni{display:inline;font-size:10.7px;color:#111827;font-style:italic}
+.rdoc.t-classic .edu-meta{font-size:10.5px;color:#111827;white-space:nowrap;margin-left:auto}
+.rdoc.t-classic .edu-cgpa{background:none;border:none;padding:0;color:#111827;font-size:10.5px}
+.rdoc.t-classic .achieve-item{margin-bottom:4px;display:flex;gap:6px}
+.rdoc.t-classic .achieve-icon{display:none}
+.rdoc.t-classic .achieve-item::before{content:'●';font-size:6px;position:relative;top:4px;color:#111827}
+.rdoc.t-classic .achieve-text{font-size:10.7px;color:#1f2937;line-height:1.5}
+.rdoc.t-classic .achieve-text strong{display:inline;font-size:10.7px;font-weight:700;color:#111827}
+.rdoc.t-classic .skill-group{display:flex;gap:5px;margin-bottom:4px;font-size:10.7px;line-height:1.55}
+.rdoc.t-classic .skill-group-title{font-size:10.7px;font-weight:700;text-transform:none;letter-spacing:0;color:#111827;white-space:nowrap;margin:0}
+.rdoc.t-classic .skill-group-title::after{content:':'}
+.rdoc.t-classic .skill-tags{display:inline;font-size:10.7px}
+.rdoc.t-classic .rtag{background:none;border:none;color:#1f2937;padding:0;font-size:10.7px;font-weight:400}
+.rdoc.t-classic .rtag:not(:last-child)::after{content:', '}
+.rdoc.t-classic .cert-item{margin-bottom:3px;display:flex;justify-content:space-between}
+.rdoc.t-classic .cert-name{font-size:10.7px;font-weight:600;color:#111827}
+.rdoc.t-classic .cert-meta{font-size:10.5px;color:#111827}
+.rdoc.t-classic .lang-item{margin-bottom:0;display:inline-flex;font-size:10.7px}
+.rdoc.t-classic .lang-item .lang-name{font-weight:600;font-size:10.7px}
+.rdoc.t-classic .lang-item .lang-lev{background:none;padding:0;font-size:10.7px;color:#111827}
+.rdoc.t-classic #rv-langs{display:flex;flex-wrap:wrap;gap:0}
+.rdoc.t-classic .lang-item:not(:last-child)::after{content:'|';margin:0 8px;color:#9ca3af}
+.rdoc.t-classic .por-item{margin-bottom:6px}
 
 /* ——— SHARED RESUME STYLES ——— */
 .rs{margin-bottom:18px}
@@ -529,19 +580,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         </div>
         <div class="fsec">
           <div class="ftitle"><span class="ficon">🎖️</span> Positions of Responsibility</div>
-          <div class="hint" style="margin-bottom:8px">GDSC, E-Cell, IEEE, CSI, NSS, Placement Committee, College Fest</div>
           <div id="por-con"></div>
           <button class="addbtn" id="add-por">+ Add POR</button>
         </div>
         <div class="fsec">
           <div class="ftitle"><span class="ficon">💻</span> Competitive Programming</div>
           <div class="frow">
-            <div class="fld"><label>LeetCode</label><input id="i-lc" type="text" value="1820 rating · 380+ solved"></div>
-            <div class="fld"><label>Codeforces</label><input id="i-cf" type="text" value="Specialist · 1420"></div>
+            <div class="fld"><label>LeetCode</label><input id="i-lc" type="text" value=""></div>
+            <div class="fld"><label>Codeforces</label><input id="i-cf" type="text" value=""></div>
           </div>
           <div class="frow">
-            <div class="fld"><label>CodeChef</label><input id="i-cc" type="text" value="3★ · Max 1720"></div>
-            <div class="fld"><label>HackerRank</label><input id="i-hr" type="text" value="5★ Problem Solving"></div>
+            <div class="fld"><label>CodeChef</label><input id="i-cc" type="text" value=""></div>
+            <div class="fld"><label>HackerRank</label><input id="i-hr" type="text" value=""></div>
           </div>
         </div>
         <div class="fsec">
@@ -566,7 +616,19 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <div class="fsec">
           <div class="ftitle"><span class="ficon">📐</span> Resume Template</div>
           <div class="tmpl-grid">
-            <div class="tmpl-card sel" data-tmpl="t-modern">
+            <div class="tmpl-card" data-tmpl="t-classic">
+              <div class="tmpl-preview" style="background:#fff;border:1px solid #d1d5db">
+                <div style="padding:5px;text-align:center">
+                  <div style="height:3px;background:#111827;border-radius:1px;width:60%;margin:0 auto 3px"></div>
+                  <div style="height:1.5px;background:#9ca3af;width:80%;margin:0 auto 4px"></div>
+                  <div style="height:1px;background:#111827;margin-bottom:3px"></div>
+                  <div style="height:2px;background:#e5e7eb;border-radius:1px;margin-bottom:2px"></div>
+                  <div style="height:2px;background:#e5e7eb;border-radius:1px;width:85%"></div>
+                </div>
+              </div>
+              <span class="tname">Classic</span>
+            </div>
+            <div class="tmpl-card" data-tmpl="t-modern">
               <div class="tmpl-preview" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe">
                 <div style="height:8px;background:linear-gradient(90deg,#1d4ed8,#7c3aed);margin-bottom:4px"></div>
                 <div style="padding:4px;display:flex;gap:3px">
@@ -656,7 +718,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       <!-- ===== RESUME DOCUMENT ===== -->
       <div class="rdoc t-modern" id="rdoc">
         <!-- ATS hidden keywords -->
-        <div class="ats-hidden">Software Developer Full Stack Developer React Node MongoDB Express JavaScript Python C++ AWS Docker Git REST API Computer Science Engineering BTech B.Tech Ashta Sangli Maharashtra CGPA Shivaji University Kolhapur ADCET Tata Consultancy Services TCS Inventory Management To-Do List Web Application internship projects open source</div>
+        <div class="ats-hidden">Software Developer Full Stack Developer React Node MongoDB Express JavaScript Python C++ AWS Docker Git REST API Computer Science Engineering BTech B.Tech Ashta Sangli Maharashtra CGPA Shivaji University Kolhapur ADCET Cognifyz Technologies Alumni Portal Dental Clinic Website ResumePro internship projects open source</div>
 
         <!-- ACCENT BAR (modern only) -->
         <div class="r-accent-bar" id="r-accent-bar"></div>
@@ -685,7 +747,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <!-- BODY -->
         <div class="rbody" id="r-body">
           <div class="rmain" id="r-main">
-            <div class="rs">
+            <div class="rs" id="sec-summary">
               <div class="rs-title"><span class="sico">👤</span> Career Objective</div>
               <p class="rsummary" id="rv-summary">Motivated B.Tech Computer Science Engineering student at Annasaheb Dange College of Engineering &amp; Technology (ADCET), Ashta, affiliated to Shivaji University, Kolhapur, with a CGPA of 8.2/10. Proficient in full-stack web development using React.js, Node.js, Express.js, and MySQL. Completed Software Development Engineer internship at Tata Consultancy Services (TCS), Pune. Seeking full-time SDE roles to build scalable, production-grade web applications.</p>
             </div>
@@ -707,11 +769,11 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
             </div>
           </div>
           <div class="rside" id="r-side">
-            <div class="ss">
+            <div class="ss" id="sec-edu">
               <div class="rs-title"><span class="sico">🎓</span> Education</div>
               <div id="rv-edu"></div>
             </div>
-            <div class="ss">
+            <div class="ss" id="sec-skills">
               <div class="rs-title"><span class="sico">🛠️</span> Technical Skills</div>
               <div id="rv-skills"></div>
             </div>
@@ -746,28 +808,26 @@ const S = {
     'Database': ['MongoDB','MySQL'],
     'Tools': ['Git','Docker','AWS']
   },
-  allSkills: ['C++','Python','JavaScript','React.js','HTML5','CSS3','Node.js','Express.js','MongoDB','MySQL','Git','Docker','AWS'],
-  education:[{id:1,type:'btech',degree:'B.Tech Computer Science Engineering',college:'Annasaheb Dange College of Engineering & Technology (ADCET), Ashta',university:'Shivaji University, Kolhapur',year:'2022 – 2026',cgpa:'8.2 / 10'}],
-  hsc:[{id:1,type:'hsc',school:'Sindhudurg Sainik School and Jr. College, Amboli',board:'Maharashtra HSC (MH Board)',stream:'Science (PCM)',year:'2022',score:'87.2%'}],
-  ssc:[{id:1,type:'ssc',school:'Sindhudurg Sainik School and Jr. College, Amboli',board:'Maharashtra SSC (MH Board)',year:'2020',score:'91.6%'}],
-  certs:[{id:1,name:'Full Stack Web Development with React',issuer:'Coursera / Hong Kong University',year:'2023'},{id:2,name:'NPTEL — Problem Solving through Programming in C (Elite)',issuer:'IIT Kharagpur / NPTEL',year:'2023'}],
+  allSkills: ['C++','Python','JavaScript','React.js','HTML5','CSS3','Node.js','Express.js','MongoDB','MySQL','AWS','Git','GitHub','Docker','Data Structures','Algorithms','REST APIs'],
+  education:[{id:1,type:'btech',degree:'B.Tech Computer Science Engineering',college:'ADCET, Ashta',university:'Shivaji University, Kolhapur',year:'2023 – 2027',cgpa:'7.7 / 10'}],
+  hsc:[{id:1,type:'hsc',school:'Sindhudurg Sainik School and Jr. College, Amboli',board:'Maharashtra HSC (MH Board)',stream:'Science (PCMB)',year:'2023',score:'70.17%'}],
+  ssc:[{id:1,type:'ssc',school:'Sindhudurg Sainik School and Jr. College, Amboli',board:'Maharashtra SSC (MH Board)',year:'2021',score:'87.20%'}],
+  certs:[{id:1,name:'Fundamentals of Cloud Computing',issuer:'AWS',year:'2026'},{id:2,name:'Cloud Computing',issuer:'NPTEL, IIT Kharagpur',year:'2025'}],
   experience:[
-    {id:1,role:'Software Development Engineer Intern',company:'Tata Consultancy Services (TCS)',location:'Pune, Maharashtra',dates:'Jun – Aug 2024',tech:'React.js, Node.js, Express.js, MySQL, Git',desc:'Developed and maintained 3 RESTful API modules for an internal enterprise ERP system used by 500+ employees.\nBuilt responsive React.js UI components that reduced manual data entry effort by 42%.\nCollaborated with a cross-functional agile team of 8 engineers across 4 sprint cycles.\nWrote unit test cases using Jest achieving 78% code coverage; resolved 15+ critical production bugs.'}
+    {id:1,role:'Web Development Intern',company:'Cognifyz Technologies',location:'Remote',dates:'Jan 2025 – Mar 2025',tech:'',desc:'Developed 3 responsive web application modules using React.js and Node.js, reducing page load time by 30% through component optimization and lazy loading.\nIntegrated RESTful APIs with Microservices architecture, robust error handling, and input validation, improving data reliability and reducing front-end bugs by 40%.\nBuilt CI/CD pipeline using Git and GitHub Actions with automated unit testing (Jest), achieving 80%+ code coverage and cutting release time by 25%.'}
   ],
   projects:[
-    {id:1,name:'Inventory Management System',tech:'React.js, Node.js, Express.js, MySQL, Docker',github:'github.com/pranavreddy/inventory-mgmt',desc:'Designed and built a full-stack Inventory Management System to track 1,000+ product SKUs in real time.\nImplemented role-based access control (RBAC) with JWT authentication for Admin, Manager, and Staff roles.\nBuilt automated low-stock alert system reducing stockout incidents by 60% for pilot client.\nDeployed using Docker on AWS EC2; handles 200+ concurrent users with optimized SQL queries.'},
-    {id:2,name:'To-Do List Web Application',tech:'HTML5, CSS3, JavaScript, Node.js, MongoDB',github:'github.com/pranavreddy/todo-webapp',desc:'Built a feature-rich To-Do List web app with task creation, priority tagging, deadlines, and drag-and-drop reordering.\nImplemented user authentication with bcrypt password hashing and Express.js session management.\nStored tasks persistently in MongoDB with full CRUD operations via RESTful API endpoints.\nAchieved Lighthouse performance score of 96; gained 120+ GitHub stars within 2 months of release.'}
+    {id:1,name:'Alumni Portal',tech:'React.js · Node.js · Express.js · MongoDB · Socket.io · JWT · Cloudinary',github:'View on GitHub',url:'',desc:'Engineered a full-stack alumni networking platform using the MERN stack, connecting students, alumni, teachers, and administrators.\nImplemented JWT Authentication, OTP-based email verification, and role-based access control to strengthen application security.\nBuilt real-time one-to-one messaging with Socket.io and integrated job referrals, event management, and mentorship features.'},
+    {id:2,name:'Dental Clinic Website',tech:'React.js · TypeScript · Vite · Tailwind CSS · EmailJS · Cloudflare Pages',github:'View on GitHub',url:'',desc:'Designed and developed a production-grade, bilingual (English/Marathi) website with a fully responsive user interface.\nImplemented appointment booking functionality using EmailJS, enabling patients to schedule consultations without backend infrastructure.\nBuilt advanced UI features including dark/light mode, animated statistics counters, interactive 3D service cards, and a gallery lightbox.'},
+    {id:3,name:'ResumePro – Resume Builder Web Application',tech:'HTML · CSS · JavaScript · html2pdf.js',github:'View on GitHub',url:'',desc:'Developed a responsive resume builder featuring real-time preview and PDF export functionality.\nDesigned and implemented 3 professional resume templates with customizable themes and layouts.\nIntegrated profile strength tracking and dynamic resume sections for education, projects, skills, and achievements.'}
   ],
   achievements:[
-    {id:1,icon:'🥇',title:'Smart India Hackathon (SIH) 2024 — State Level Finalist',desc:'Represented ADCET Ashta; selected among top 15 teams across Maharashtra for national round.'},
-    {id:2,icon:'🏆',title:'TCS CodeVita Season 12 — Zonal Round Qualifier',desc:'Qualified for zonal round among 200,000+ global participants in TCS competitive programming contest.'},
-    {id:3,icon:'📜',title:'NPTEL Elite Certificate — IIT Kharagpur',desc:'Scored 82/100 in Problem Solving through Programming in C; awarded Elite certificate.'}
+    {id:1,icon:'🏆',title:'Winner, National Level Hackathon — RIT Islampur:',desc:' Secured first place in a 2-day national-level hackathon competition.'},
+    {id:2,icon:'💻',title:'LeetCode:',desc:' 200+ problems solved.'}
   ],
-  por:[
-    {id:1,role:'Technical Secretary',org:'Computer Society of India (CSI) — ADCET Ashta Chapter',dates:'Aug 2023 – May 2024',desc:'Organized 5 technical workshops and 1 inter-college hackathon with 250+ student participants.'}
-  ],
-  counters:{edu:2,hsc:2,ssc:2,cert:3,exp:2,proj:3,ach:4,por:2},
-  template:'t-modern',
+  por:[],
+  counters:{edu:2,hsc:2,ssc:2,cert:3,exp:2,proj:4,ach:3,por:1},
+  template:'t-classic',
   accentColor:'#1d4ed8'
 };
 
@@ -829,12 +889,10 @@ function renderSkillsPreview() {
   // fixed display categories
   const catMap = {
     'Languages': ['C++','C','Python','Java','JavaScript','TypeScript','Go','Rust'],
-    'Frontend': ['React.js','HTML5','CSS3','Next.js','Vue.js','Tailwind CSS','Redux'],
-    'Backend': ['Node.js','Express.js','Django','Flask','FastAPI','Spring Boot','REST APIs','GraphQL'],
-    'Database': ['MongoDB','MySQL','PostgreSQL','Redis','Firebase','SQLite'],
-    'Tools': ['Git','Docker','AWS','GitHub Actions','Linux','Kubernetes','Postman','VS Code'],
-    'ML / AI': ['TensorFlow','PyTorch','Scikit-learn','Pandas','NumPy','OpenCV','NLP','LangChain'],
-    'CS Concepts': ['Data Structures','Algorithms','System Design','OOP','DBMS','OS','Computer Networks']
+    'Frontend / Backend': ['React.js','HTML5','CSS3','Next.js','Vue.js','Tailwind CSS','Redux','Node.js','Express.js','Django','Flask','FastAPI','Spring Boot','REST APIs','GraphQL'],
+    'Database / Cloud': ['MongoDB','MySQL','PostgreSQL','Redis','Firebase','SQLite','AWS'],
+    'Tools / Concepts': ['Git','GitHub','Docker','GitHub Actions','Linux','Kubernetes','Postman','VS Code','Data Structures','Algorithms','System Design','OOP','DBMS','OS','Computer Networks'],
+    'ML / AI': ['TensorFlow','PyTorch','Scikit-learn','Pandas','NumPy','OpenCV','NLP','LangChain']
   };
   const shown = {};
   Object.entries(catMap).forEach(([cat, skList]) => {
@@ -912,7 +970,7 @@ function mkHscCard(item) {
   d.innerHTML = `<div class="dcard-head"><span>📚 Class 12 #${item.id}</span><button class="dremove" data-type="hsc" data-id="${item.id}">×</button></div>
   <div class="fld"><label>School / Junior College</label><input type="text" data-field="school" placeholder="Fergusson College Jr. College / Bhonsala Military School" value="${item.school||''}"></div>
   <div class="frow"><div class="fld"><label>Board</label><select data-field="board">${boards}</select></div><div class="fld"><label>Year</label><input type="text" data-field="year" placeholder="2022" value="${item.year||''}"></div></div>
-  <div class="frow"><div class="fld"><label>Stream</label><select data-field="stream"><option value="Science (PCM)"${item.stream==='Science (PCM)'?' selected':''}>Science (PCM)</option><option value="Science (PCB)"${item.stream==='Science (PCB)'?' selected':''}>Science (PCB)</option><option value="Science (PCMB)">Science (PCMB)</option><option value="Commerce">Commerce</option></select></div><div class="fld"><label>Percentage</label><input type="text" data-field="score" placeholder="89.6%" value="${item.score||''}"></div></div>`;
+  <div class="frow"><div class="fld"><label>Stream</label><select data-field="stream"><option value="Science (PCM)"${item.stream==='Science (PCM)'?' selected':''}>Science (PCM)</option><option value="Science (PCB)"${item.stream==='Science (PCB)'?' selected':''}>Science (PCB)</option><option value="Science (PCMB)"${item.stream==='Science (PCMB)'?' selected':''}>Science (PCMB)</option><option value="Commerce">Commerce</option></select></div><div class="fld"><label>Percentage</label><input type="text" data-field="score" placeholder="89.6%" value="${item.score||''}"></div></div>`;
   d.querySelectorAll('[data-field]').forEach(inp => { inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();}); inp.addEventListener('change',()=>{item[inp.dataset.field]=inp.value;renderEduPrev();}); });
   return d;
 }
@@ -938,16 +996,16 @@ function renderEduPrev() {
   const w = document.getElementById('rv-edu'); w.innerHTML = '';
   [...S.education,...S.hsc,...S.ssc].forEach(item => {
     const dv = document.createElement('div'); dv.className = 'edu-item';
-    if(item.type==='btech') dv.innerHTML=`<div class="edu-deg">${item.degree||'B.Tech Degree'}</div><div class="edu-school">${item.college||'College'}</div><div class="edu-uni">${item.university||''}</div><div class="edu-meta">${item.year||''} ${item.cgpa?'<span class="edu-cgpa">CGPA '+item.cgpa+'</span>':''}`;
-    else if(item.type==='hsc') dv.innerHTML=`<div class="edu-deg">Class XII${item.stream?' — '+item.stream:''}</div><div class="edu-school">${item.school||'School'}</div><div class="edu-uni">${item.board||''}</div><div class="edu-meta">${item.year||''} · ${item.score||''}`;
-    else dv.innerHTML=`<div class="edu-deg">Class X</div><div class="edu-school">${item.school||'School'}</div><div class="edu-uni">${item.board||''}</div><div class="edu-meta">${item.year||''} · ${item.score||''}`;
+    if(item.type==='btech') dv.innerHTML=`<div><span class="edu-deg">${item.degree||'B.Tech Degree'} — </span><span class="edu-school">${item.college||'College'}</span><span class="edu-uni">${item.university?', '+item.university:''}</span>${item.cgpa?' <span class="edu-cgpa">(CGPA: '+item.cgpa+')</span>':''}</div><div class="edu-meta">${item.year||''}</div>`;
+    else if(item.type==='hsc') dv.innerHTML=`<div><span class="edu-deg">Class XII — ${item.stream?item.stream+', ':''}</span><span class="edu-school">${item.school||'School'}</span><span class="edu-uni"> (${item.board||''}${item.score?' · '+item.score:''})</span></div><div class="edu-meta">${item.year||''}</div>`;
+    else dv.innerHTML=`<div><span class="edu-deg">Class X, </span><span class="edu-school">${item.school||'School'}</span><span class="edu-uni"> (${item.board||''}${item.score?' · '+item.score:''})</span></div><div class="edu-meta">${item.year||''}</div>`;
     w.appendChild(dv);
   });
 }
 function renderCertPrev() {
   const w = document.getElementById('rv-certs'); w.innerHTML = '';
   document.getElementById('rv-cert-sec').style.display = S.certs.length ? '' : 'none';
-  S.certs.forEach(c => { const d=document.createElement('div');d.className='cert-item';d.innerHTML=`<div class="cert-name">${c.name||'Certification'}</div><div class="cert-meta">${c.issuer||''}${c.year?' · '+c.year:''}</div>`;w.appendChild(d); });
+  S.certs.forEach(c => { const d=document.createElement('div');d.className='cert-item';d.innerHTML=`<div class="cert-name">${c.name||'Certification'}${c.issuer?' — '+c.issuer:''}</div><div class="cert-meta">${c.year||''}</div>`;w.appendChild(d); });
 }
 function renderEduCards(){const c=document.getElementById('edu-con');c.innerHTML='';S.education.forEach(i=>c.appendChild(mkEduCard(i)));}
 function renderHscCards(){const c=document.getElementById('hsc-con');c.innerHTML='';S.hsc.forEach(i=>c.appendChild(mkHscCard(i)));}
@@ -977,8 +1035,8 @@ function renderExpPrev() {
   S.experience.forEach(item => {
     const dv = document.createElement('div'); dv.className = 'entry';
     const b = (item.desc||'').split('\n').filter(l=>l.trim());
-    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${item.role||'Role'}</span><span class="entry-date">${item.dates||''}</span></div>
-    <div class="entry-org">${item.company||'Company'}${item.location?', '+item.location:''}${item.tech?' · <em style="font-weight:400;font-size:10.5px">'+item.tech+'</em>':''}</div>
+    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${item.role||'Role'} — ${item.company||'Company'}${item.location?' ('+item.location+')':''}</span><span class="entry-date">${item.dates||''}</span></div>
+    ${item.tech?`<div class="entry-org">${item.tech}</div>`:''}
     <ul class="entry-bullets">${b.map(x=>`<li>${x}</li>`).join('')||'<li>Describe your contributions and impact.</li>'}</ul>`;
     w.appendChild(dv);
   });
@@ -994,10 +1052,17 @@ function mkProjCard(item) {
   d.innerHTML=`<div class="dcard-head"><span>⚙️ Project #${item.id}</span><button class="dremove" data-type="proj" data-id="${item.id}">×</button></div>
   <div class="fld"><label>Project Name</label><input type="text" data-field="name" placeholder="ShikshaSetu — Smart Attendance Portal" value="${item.name||''}"></div>
   <div class="fld"><label>Tech Stack</label><input type="text" data-field="tech" placeholder="React.js, Node.js, MongoDB, Docker" value="${item.tech||''}"></div>
-  <div class="fld"><label>GitHub / Live Link</label><input type="text" data-field="github" placeholder="github.com/omkarpatil/project" value="${item.github||''}"></div>
+  <div class="fld"><label>Link Label (shown next to title)</label><input type="text" data-field="github" placeholder="View on GitHub" value="${item.github||''}"></div>
+  <div class="fld"><label>Link URL (clicking the title opens this)</label><input type="text" data-field="url" placeholder="https://github.com/username/project" value="${item.url||''}"></div>
   <div class="fld"><label>Key Points (one per line)</label><textarea data-field="desc" rows="3" placeholder="Engineered X achieving Y metric.\nDeployed on Z with N active users.">${item.desc||''}</textarea></div>`;
   d.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('input',()=>{item[inp.dataset.field]=inp.value;renderProjPrev();}));
   return d;
+}
+function ensureUrl(u) {
+  u = (u||'').trim();
+  if(!u) return '';
+  if(/^https?:\/\//i.test(u) || /^mailto:/i.test(u)) return u;
+  return 'https://' + u;
 }
 function renderProjPrev() {
   const w = document.getElementById('rv-proj'); w.innerHTML = '';
@@ -1005,14 +1070,18 @@ function renderProjPrev() {
   S.projects.forEach(item => {
     const dv = document.createElement('div'); dv.className = 'entry';
     const b = (item.desc||'').split('\n').filter(l=>l.trim());
-    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${item.name||'Project'}</span>${item.github?`<span class="entry-date" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:9.5px">${item.github}</span>`:''}</div>
+    const href = ensureUrl(item.url);
+    const titleHtml = href
+      ? `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor" title="Open project link">${item.name||'Project'}</a>`
+      : (item.name||'Project');
+    dv.innerHTML=`<div class="entry-head"><span class="entry-role">${titleHtml}</span>${item.github?(href?`<a href="${href}" target="_blank" rel="noopener noreferrer" class="entry-date" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:9.5px;text-decoration:none">${item.github}</a>`:`<span class="entry-date" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:9.5px">${item.github}</span>`):''}</div>
     ${item.tech?`<div class="entry-org" style="font-style:normal;font-size:10.5px">${item.tech}</div>`:''}
     <ul class="entry-bullets">${b.map(x=>`<li>${x}</li>`).join('')||'<li>Describe the project, tech used, and impact.</li>'}</ul>`;
     w.appendChild(dv);
   });
 }
 function renderProjCards(){const c=document.getElementById('proj-con');c.innerHTML='';S.projects.forEach(i=>c.appendChild(mkProjCard(i)));}
-document.getElementById('add-proj').onclick=()=>{const i={id:S.counters.proj++,name:'',tech:'',github:'',desc:''};S.projects.push(i);document.getElementById('proj-con').appendChild(mkProjCard(i));};
+document.getElementById('add-proj').onclick=()=>{const i={id:S.counters.proj++,name:'',tech:'',github:'',url:'',desc:''};S.projects.push(i);document.getElementById('proj-con').appendChild(mkProjCard(i));};
 
 // ===================================================
 // ACHIEVEMENTS
@@ -1113,16 +1182,29 @@ function renderLangPrev() {
 // ===================================================
 // TEMPLATE SWITCHING
 // ===================================================
-const TMPL_NAMES = {'t-modern':'Modern','t-minimal':'Minimal','t-corporate':'Corporate'};
+const TMPL_NAMES = {'t-modern':'Modern','t-minimal':'Minimal','t-corporate':'Corporate','t-classic':'Classic'};
+
+function restoreDefaultOrder() {
+  const rside = document.getElementById('r-side');
+  const rmain = document.getElementById('r-main');
+  ['sec-edu','sec-skills','rv-cp-sec','rv-cert-sec','rv-lang-sec'].forEach(id=>{const el=document.getElementById(id); if(el) rside.appendChild(el);});
+  ['sec-summary','rv-exp-sec','rv-proj-sec','rv-ach-sec','rv-por-sec'].forEach(id=>{const el=document.getElementById(id); if(el) rmain.appendChild(el);});
+}
+function applyClassicOrder() {
+  const rmain = document.getElementById('r-main');
+  const order = ['sec-summary','sec-edu','rv-exp-sec','rv-proj-sec','rv-ach-sec','rv-por-sec','sec-skills','rv-cp-sec','rv-cert-sec','rv-lang-sec'];
+  order.forEach(id=>{ const el=document.getElementById(id); if(el) rmain.appendChild(el); });
+}
 
 function applyTemplate(tmpl) {
   const doc = document.getElementById('rdoc');
   const head = document.getElementById('r-head');
-  const headMain = document.getElementById('rhead-main');
   const headContact = document.getElementById('rhead-contact');
   const crow = document.getElementById('rv-crow');
   const avatar = document.getElementById('r-avatar');
   const accentBar = document.getElementById('r-accent-bar');
+
+  restoreDefaultOrder();
 
   // Remove all templates
   doc.className = `rdoc ${tmpl}`;
@@ -1136,7 +1218,6 @@ function applyTemplate(tmpl) {
   if(tmpl === 't-corporate') {
     avatar.style.display = '';
     updateCorporateAvatar();
-    // Move avatar before rhead-main
     if(head.firstChild !== avatar) head.insertBefore(avatar, head.firstChild);
     headContact.style.display = '';
     crow.style.cssText = 'display:flex;flex-direction:row;flex-wrap:wrap;gap:4px 12px;margin-top:10px;justify-content:flex-start;align-items:center';
@@ -1144,6 +1225,11 @@ function applyTemplate(tmpl) {
     avatar.style.display = 'none';
     headContact.style.display = '';
     crow.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-top:6px';
+  } else if(tmpl === 't-classic') {
+    avatar.style.display = 'none';
+    headContact.style.display = '';
+    crow.style.cssText = '';
+    applyClassicOrder();
   } else { // minimal
     avatar.style.display = 'none';
     headContact.style.display = '';
@@ -1250,7 +1336,27 @@ renderPorCards(); renderPorPrev();
 renderSkChips(); renderSkillsPreview(); syncCatChips();
 renderCPPrev(); renderLangPrev();
 updateCorporateAvatar();
+
+// Set basics to match uploaded resume defaults
+document.getElementById('i-name').value = 'Pranav Reddy';
+document.getElementById('i-title').value = '';
+document.getElementById('rv-title').textContent = '';
+document.getElementById('i-email').value = 'pranavreddy1721@gmail.com';
+document.getElementById('rv-email').innerHTML = document.getElementById('rv-email').querySelector('svg').outerHTML + 'pranavreddy1721@gmail.com';
+document.getElementById('i-phone').value = '+91 8007261820';
+document.getElementById('rv-phone').innerHTML = document.getElementById('rv-phone').querySelector('svg').outerHTML + '+91 8007261820';
+document.getElementById('i-loc').value = 'Ashta, Sangli, Maharashtra';
+document.getElementById('rv-loc').innerHTML = document.getElementById('rv-loc').querySelector('svg').outerHTML + 'Ashta, Sangli, Maharashtra';
+document.getElementById('i-linkedin').value = 'LinkedIn';
+document.getElementById('rv-linkedin').innerHTML = document.getElementById('rv-linkedin').querySelector('svg').outerHTML + 'LinkedIn';
+document.getElementById('i-github').value = 'GitHub';
+document.getElementById('rv-github').innerHTML = document.getElementById('rv-github').querySelector('svg').outerHTML + 'GitHub';
+const summaryText = 'Results-driven Computer Science Engineering student and Full Stack Developer with proven experience shipping three production-grade web applications using the MERN stack (React.js, Node.js, Express.js, MongoDB). Strong command of JavaScript, REST APIs, JWT Authentication, and Cloud Computing (AWS), backed by a solid foundation in Data Structures and Algorithms and 100+ problems solved on LeetCode. Recognized hackathon winner seeking a Software Engineering role to build scalable, high-impact products.';
+document.getElementById('i-summary').value = summaryText;
+document.getElementById('rv-summary').textContent = summaryText;
+
 applyTemplate(S.template);
+document.querySelector('.tmpl-card[data-tmpl="t-classic"]').classList.add('sel');
 prog();
 </script>
 </body>
